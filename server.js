@@ -16,7 +16,8 @@ app.post('/submit-order', (req, res) => {
             return;
         }
         const orders = JSON.parse(data);
-        orders.push(newOrder);
+        // Important: adding timestamp so we know when the order came in.
+        orders.push({...newOrder, timestamp: new Date()});
         fs.writeFile('orders.json', JSON.stringify(orders), (err) => {
             if (err) {
                 res.status(500).send('Error writing file');

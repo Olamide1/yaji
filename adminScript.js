@@ -35,11 +35,14 @@ function displayOrders(orders) {
     const ordersContainer = document.getElementById('orders');
     ordersContainer.innerHTML = ''; // Clear out any existing content
 
-    // Sort orders by the timestamp of the last item in the 'items' array in descending order (most recent first)
+    /**
+     * We're no longer doing:
+     * "Sort orders by the timestamp of the last item in the 'items' array in descending order (most recent first)"
+     * 
+     * We're just sorting by the time the order arrived. Since not all orders have a timestamp value, we're chaining it optionally.
+     */
     orders.sort((a, b) => {
-        const lastItemA = a.items[a.items.length - 1];
-        const lastItemB = b.items[b.items.length - 1];
-        return new Date(lastItemB.timestamp) - new Date(lastItemA.timestamp);
+        return new Date(a?.timestamp) - new Date(b?.timestamp);
     });
 
     orders.forEach(order => {
