@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="adminStyles.css">
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Admin Dashboard</h1>
+            
+            <!-- Navigation Buttons -->
+            <div class="buttons">
+                <button class="button is-primary" onclick="showSection('metrics')">Metrics</button>
+                <button class="button is-primary" onclick="showSection('orders')">Orders Overview</button>
+                <button class="button is-primary" onclick="showSection('menuManagement')">Menu Management</button>
+                <button class="button is-primary" onclick="showSection('menuList')">Menu List</button>
+            </div>
+            
+            <!-- Metrics Section -->
+            <div id="metrics" class="box" style="display:none;">
+                <!-- Add your metrics content here -->
+            </div>
+
+            <!-- Orders Section -->
+            <div id="orders" style="display:none;">
+                <!-- Add your orders content here -->
+            </div>
+
+            <!-- Menu Management Section -->
+            <div id="menuManagement" style="display:none;">
+                <h2 class="subtitle">Add New Menu Item</h2>
+                <form id="menuForm">
+                    <div class="field">
+                        <label class="label">Item Name</label>
+                        <div class="control">
+                            <input class="input" type="text" id="itemName" placeholder="Name" required>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Description</label>
+                        <div class="control">
+                            <textarea class="textarea" id="itemDescription" placeholder="Description" required></textarea>
+                        </div>
+                    </div>
+                    <!-- Size and Price Inputs -->
+                    <div class="field">
+                        <label class="label">Sizes & Prices</label>
+                        <div class="control" id="sizePriceContainer">
+                            <!-- Dynamic size-price inputs will be added here -->
+                        </div>
+                        <button type="button" id="addSize" class="button is-small is-info">Add Size</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-primary" type="submit">Add Item</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="menuList" style="display:none;">
+                <h2 class="subtitle">Menu List</h2>
+                <ul>
+                    <!-- Menu items and "Out of Stock" buttons will be added here -->
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <script src="adminScript.js"></script>
+</body>
+</html>

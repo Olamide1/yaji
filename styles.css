@@ -1,0 +1,85 @@
+/* Base Styles */
+body {
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+    background-color: #FAFAFA;
+    color: #333;
+    line-height: 1.5;
+    padding: 10px;
+}
+
+/* Container - Leveraging Bulma */
+.container {
+    max-width: 100%;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+/* Typography - Simplified and Responsive */
+.title {
+    font-size: 1.5rem;
+    color: #5755d9; /* Primary color */
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Form Styles - Enhanced for mobile usability */
+.input, .textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.button {
+    width: 100%;
+    background-color: #5755d9;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.button:hover {
+    background-color: #4845c7;
+}
+
+/* Menu Items - Card Style */
+.menu-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.menu-item h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.size-label {
+    margin-right: 10px;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+/* Total Cost Display */
+#total {
+    font-size: 1.2rem;
+    text-align: right;
+    margin-top: 20px;
+}
+
+/* Responsive Design - Mobile First */
+@media screen and (min-width: 768px) {
+    .container {
+        max-width: 600px; /* Fixed max width for larger screens */
+    }
+
+    .title {
+        font-size: 2rem;
+    }
+}

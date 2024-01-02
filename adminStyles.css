@@ -1,0 +1,25 @@
+/* Ensure body takes full device width, avoid horizontal scrolling */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f5f7;
+}
+
+/* Styles for the admin panel */
+.container {
+    padding: 0 15px; /* Add padding on the sides */
+}
+
+/* Order details should wrap and not cause horizontal overflow */
+.order, .order ul, .order li, .order p {
+    word-wrap: break-word;
+}
+
+/* Ensure dropdowns do not exceed screen width */
+.status-selector {
+    width: auto; /* Let it be as wide as its content */
+    max-width: 100%; /* But no wider than the screen */
+}

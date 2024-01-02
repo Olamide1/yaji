@@ -1,0 +1,75 @@
+[
+  {
+    "id": "e75aw02qv",
+    "name": "Olamide",
+    "email": "theolaakomolafe@gmail.com",
+    "phone": "920539797",
+    "address": "beco Funil 6",
+    "items": [
+      {
+        "name": "Margherita Pizza",
+        "size": "Medium",
+        "price": 10.99
+      },
+      {
+        "name": "Veggie Burger",
+        "size": "Large",
+        "price": 9.99
+      },
+      {
+        "name": "Pasta",
+        "size": "1L",
+        "price": 23
+      }
+    ],
+    "total": 43.980000000000004,
+    "status": "Delivered"
+  },
+  {
+    "id": "dfuux3jx6",
+    "name": "Marie",
+    "email": "marie@gmail.com",
+    "phone": "920539797",
+    "address": "beco Funil 6",
+    "items": [
+      {
+        "name": "Margherita Pizza",
+        "size": "Medium",
+        "price": 10.99
+      },
+      {
+        "name": "Banga Soup",
+        "size": "2L",
+        "price": 30
+      },
+      {
+        "name": "Marie's special",
+        "size": "Large",
+        "price": 25
+      }
+    ],
+    "total": 65.99000000000001,
+    "status": "Delivered"
+  },
+  {
+    "id": "g742akij9",
+    "name": "Olamide",
+    "email": "theolaakomolafe@gmail.com",
+    "phone": "920539797",
+    "address": "beco Funil 6",
+    "items": [
+      {
+        "name": "Margherita Pizza",
+        "size": "Medium",
+        "price": 10.99
+      },
+      {
+        "name": "Veggie Burger",
+        "size": "Large",
+        "price": 9.99
+      }
+    ],
+    "total": 20.98,
+    "status": "Delivered"
+  }
+]

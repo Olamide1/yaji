@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Food Order</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <section class="container section">
+        <div class="container">
+            <h1 class="title">YajiLagos- Place Your Order</h1>
+            <div id="menu"></div>
+            <p id="total">Total: $0.00</p>
+
+            <form id="orderForm">
+                <input class="input" type="text" placeholder="Name" id="name" required>
+                <input class="input" type="email" placeholder="Email" id="email" required>
+                <input class="input" type="tel" placeholder="Phone Number" id="phone" required>
+                <input class="input"type="text" placeholder="Address" id="address" required>
+                <button class="button is-primary" type="submit">Submit Order</button>
+            </form>
+        </div>
+    </section>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+[
+  {
+    "id": 1,
+    "name": "Margherita Pizza",
+    "description": "Classic Margherita with fresh tomatoes, mozzarella cheese, and basil.",
+    "sizes": [
+      {
+        "name": "Small",
+        "price": 8.99
+      },
+      {
+        "name": "Medium",
+        "price": 10.99
+      },
+      {
+        "name": "Large",
+        "price": 12.99
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Veggie Burger",
+    "description": "A delicious burger with a veggie patty, lettuce, tomato, and cheese.",
+    "sizes": [
+      {
+        "name": "Regular",
+        "price": 7.99
+      },
+      {
+        "name": "Large",
+        "price": 9.99
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Banga Soup",
+    "description": "something somethin",
+    "sizes": [
+      {
+        "name": "Meal",
+        "price": 10
+      },
+      {
+        "name": "2L",
+        "price": 30
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Pasta",
+    "description": "White rice made with this and that",
+    "sizes": [
+      {
+        "name": "Meal",
+        "price": 10
+      },
+      {
+        "name": "1L",
+        "price": 23
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Marie's special",
+    "description": "Marie's special is made of soup, and pasta.",
+    "sizes": [
+      {
+        "name": "Large",
+        "price": 25
+      },
+      {
+        "name": "Medium",
+        "price": 14.94
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Pasta",
+    "description": "Some nice pasta with salmon.",
+    "sizes": [
+      {
+        "name": "Meal",
+        "price": 12
+      },
+      {
+        "name": "1L",
+        "price": 25
+      }
+    ]
+  }
+]
