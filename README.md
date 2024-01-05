@@ -1,9 +1,16 @@
 # Yaji Lagos.
 
-To run
-> python -m http.server // to open the frontend
+To run;
 
+to open the frontend:
+```py
+python -m http.server
+```
+
+for backend:
+```cmd
 > yarn|npm run start
+```
 
 
 ### TODOs
