@@ -92,5 +92,20 @@
         "price": 25
       }
     ]
+  },
+  {
+    "id": 7,
+    "name": "Nwachukwu Sauce",
+    "description": "A chicken broth made with x, yz, things. Slow cooked in charcoal beef.",
+    "sizes": [
+      {
+        "name": "Meal",
+        "price": 20
+      },
+      {
+        "name": "2L",
+        "price": 30
+      }
+    ]
   }
 ]

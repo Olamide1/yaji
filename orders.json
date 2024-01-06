@@ -23,7 +23,7 @@
       }
     ],
     "total": 43.980000000000004,
-    "status": "Delivered"
+    "status": "Received"
   },
   {
     "id": "dfuux3jx6",
@@ -70,6 +70,27 @@
       }
     ],
     "total": 20.98,
+    "status": "Delivered"
+  },
+  {
+    "id": "2fx4pgfis",
+    "name": "Ola",
+    "email": "theolaakomolafe@gmail.com",
+    "phone": "920539797",
+    "address": "beco Funil 6",
+    "items": [
+      {
+        "name": "Nwachukwu Sauce",
+        "size": "Meal",
+        "price": 20
+      },
+      {
+        "name": "Nwachukwu Sauce",
+        "size": "2L",
+        "price": 30
+      }
+    ],
+    "total": 50,
     "status": "Delivered"
   }
 ]
