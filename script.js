@@ -1,23 +1,33 @@
 // Fetching menu items from menu.json
 function fetchMenu() {
-    fetch('menu.json')
+    
+    
+    fetch('http://localhost:3000/menu')
         .then(response => response.json())
         .then(menu => displayMenu(menu))
         .catch(error => console.error('Error fetching menu:', error));
 }
 
-function displayMenu(menu) {
+async function displayMenu(menu) {
     const menuContainer = document.getElementById('menu');
     menu.forEach(item => {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'menu-item';
         itemDiv.innerHTML = `
-            <h3 class="menu-item-title">${item.name}</h3> <!-- Added a specific class -->
+            <h3 class="menu-item-title">${item.name}</h3>
+            <!-- Added a specific class -->
             <p>${item.description}</p>
             <div class="sizes">
                 ${item.sizes.map(size => `
                     <label class="size-label">
-                        <input type="checkbox" name="size-${item.id}" class="item-size" data-price="${size.price}" value="${size.name}">
+                        <input type="checkbox" 
+                        name="food_menu"
+                        data-name="size-${item.name + '_' + size.name}" 
+                        class="item-size" 
+                        value="${size.productPriceOnStripeId}" 
+                        data-stripePriceId="${size.productPriceOnStripeId}" 
+                        data-price="${size.price}" 
+                        data-value="${size.name}">
                         ${size.name} - $${size.price}
                     </label>
                 `).join('')}
@@ -50,7 +60,8 @@ function generateOrderId() {
 }
 
 // Handling form submission
-document.getElementById('orderForm').addEventListener('submit', function(event) {
+document.getElementById('orderForm-not-use') // not using this for now.
+?.addEventListener('submit', function(event) {
     event.preventDefault();
 
     // Constructing the order object with a unique ID
@@ -67,11 +78,21 @@ document.getElementById('orderForm').addEventListener('submit', function(event) 
 
     // Collecting ordered items
     document.querySelectorAll('.item-size:checked').forEach(item => {
+        console.log('what item', item)
         const itemContainer = item.closest('.menu-item');
         const itemName = itemContainer.querySelector('.menu-item-title').innerText;
-        const itemSize = item.value;
+        const itemSize = item.dataset.value;
         const itemPrice = parseFloat(item.dataset.price);
-        order.items.push({ name: itemName, size: itemSize, price: itemPrice });
+
+        const itemStripePriceId = item.dataset.stripePriceId;
+
+        
+        order.items.push({ 
+            name: itemName, 
+            size: itemSize, 
+            price: itemPrice,
+            stripePriceId: itemStripePriceId,
+        });
     });
 
     // Calculating total

@@ -35,11 +35,14 @@ function displayOrders(orders) {
     const ordersContainer = document.getElementById('orders');
     ordersContainer.innerHTML = ''; // Clear out any existing content
 
-    // Sort orders by the timestamp of the last item in the 'items' array in descending order (most recent first)
+    /**
+     * We're no longer doing:
+     * "Sort orders by the timestamp of the last item in the 'items' array in descending order (most recent first)"
+     * 
+     * We're just sorting by the time the order arrived. Since not all orders have a timestamp value, we're chaining it optionally.
+     */
     orders.sort((a, b) => {
-        const lastItemA = a.items[a.items.length - 1];
-        const lastItemB = b.items[b.items.length - 1];
-        return new Date(lastItemB.timestamp) - new Date(lastItemA.timestamp);
+        return new Date(a?.timestamp) - new Date(b?.timestamp);
     });
 
     orders.forEach(order => {
@@ -239,21 +242,6 @@ document.addEventListener('DOMContentLoaded', () => {
     showSection('metrics'); // You can change the default section here
 });
 
-// Function to fetch menu data from menu.json
-async function getMenuData() {
-    try {
-        const response = await fetch('menu.json');
-        if (!response.ok) {
-            throw new Error('Failed to fetch menu data');
-        }
-        const menuData = await response.json();
-        return menuData;
-    } catch (error) {
-        console.error('Error fetching menu data:', error);
-        return []; // Return an empty array in case of an error
-    }
-}
-
 
 // Function to populate the menu list
 async function populateMenuList() {
@@ -263,14 +251,14 @@ async function populateMenuList() {
         const menu = await fetchMenuData(); // Fetch menu data from menu.json
         // Clear existing list items
         menuList.innerHTML = '';
-
+        
         menu.forEach(item => {
             const listItem = document.createElement('li');
             const priceText = item.price ? `$${item.price.toFixed(2)}` : ''; // Check for the existence of the price property
             listItem.innerHTML = `
                 ${item.name} - ${priceText}
                 <button class="button is-small" onclick="toggleOutOfStock(${item.id})">
-                    ${item.outOfStock ? 'In Stock' : 'Out of Stock'}
+                    ${item.outOfStock ? 'Mark as In Stock' : 'Mark as Out of Stock'}
                 </button>
             `;
 
@@ -284,7 +272,12 @@ async function populateMenuList() {
 // Function to fetch menu data from menu.json
 async function fetchMenuData() {
     try {
-        const response = await fetch('menu.json');
+        const response = await fetch('http://localhost:3000/menu', { 
+            method: 'GET', 
+            headers: {
+                'Content-Type': 'application/json' // Set the content type
+            }
+        });
         if (!response.ok) {
             throw new Error('Failed to fetch menu data');
         }
@@ -298,6 +291,11 @@ async function fetchMenuData() {
 
 // Function to save menu data
 async function saveMenuData(menuData) {
+    /**
+     * TODO: this should be written as a promise, it's been called like one.
+     * 
+     * Also, should it return data?
+     */
     try {
         const response = await fetch('http://localhost:3000/save-menu', { 
             method: 'POST', 
@@ -309,6 +307,9 @@ async function saveMenuData(menuData) {
         if (!response.ok) {
             throw new Error('Failed to save menu data');
         }
+        // Do we need to return??
+        // const updateMenuData = await response.json();
+        // return updateMenuData;
     } catch (error) {
         console.error('Error saving menu data:', error);
     }
@@ -317,28 +318,31 @@ async function saveMenuData(menuData) {
 
 
 // Function to toggle "Out of Stock" status
-function toggleOutOfStock(itemId) {
+async function toggleOutOfStock(itemId) {
+    console.log('calling toggleOutOfStock')
+    
     // Fetch the menu data from menu.json
-    fetchMenuData()
-        .then(menu => {
-            const item = menu.find(item => item.id === itemId);
+    let menu = await fetchMenuData()
+    const itemIndex = menu.findIndex((item) => item.id === itemId);
 
-            if (item) {
-                item.outOfStock = !item.outOfStock; // Toggle the status
-                // Save the updated menu data to menu.json
-                saveMenuData(menu)
-                    .then(() => {
-                        // Update the menu list display
-                        populateMenuList(menu);
-                    })
-                    .catch(error => {
-                        console.error('Error saving menu data:', error);
-                    });
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching menu data:', error);
-        });
+    if (itemIndex > -1) {
+        let item = menu[itemIndex]
+        console.log('found item', item)
+        
+        item.outOfStock = !item.outOfStock; // Toggle the status
+        // Save the updated menu data to menu.json
+
+        // TODO: replace properly here.
+        menu[itemIndex] = item // DONE: replaced here.
+        saveMenuData(menu)
+
+        // Update the menu list display
+        populateMenuList()
+
+    } else {
+        console.error('did not find item with id', itemId)
+    }
+
 }
 
 

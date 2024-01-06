@@ -73,24 +73,89 @@
     "status": "Delivered"
   },
   {
-    "id": "2fx4pgfis",
-    "name": "Ola",
-    "email": "theolaakomolafe@gmail.com",
-    "phone": "920539797",
-    "address": "beco Funil 6",
+    "id": "rywksow0b",
+    "name": "Johnson",
+    "email": "johnson@email.com",
+    "phone": "9093242424",
+    "address": "Some place in this world.",
+    "items": [],
+    "total": 0,
+    "status": "In Progress"
+  },
+  {
+    "id": "3tcdbo010",
+    "name": "Sweet",
+    "email": "email@gmai.com",
+    "phone": "903343443",
+    "address": "Somewhere in Earth",
     "items": [
       {
-        "name": "Nwachukwu Sauce",
+        "name": "Banga Soup",
         "size": "Meal",
-        "price": 20
+        "price": 10
       },
       {
-        "name": "Nwachukwu Sauce",
-        "size": "2L",
-        "price": 30
+        "name": "Pasta",
+        "size": "Meal",
+        "price": 12
       }
     ],
-    "total": 50,
-    "status": "Delivered"
+    "total": 22,
+    "status": "Sent"
+  },
+  {
+    "id": "v9msplhku",
+    "name": "Name",
+    "email": "email@gmai.com",
+    "phone": "4335335",
+    "address": "Address here.",
+    "items": [],
+    "total": 0,
+    "status": "Received",
+    "timestamp": "2024-01-06T07:31:15.408Z"
+  },
+  {
+    "id": "4lorc4z2q",
+    "name": "Name",
+    "email": "email@gmai.com",
+    "phone": "4335335",
+    "address": "Address here.",
+    "items": [
+      {
+        "name": "This will go",
+        "size": "Regular",
+        "price": 456
+      },
+      {
+        "name": "This will go",
+        "size": "Large",
+        "price": 533
+      }
+    ],
+    "total": 989,
+    "status": "Received",
+    "timestamp": "2024-01-06T07:48:20.972Z"
+  },
+  {
+    "id": "i3ovaklm7",
+    "name": "Name",
+    "email": "email@gmai.com",
+    "phone": "4335335",
+    "address": "Address here.",
+    "items": [
+      {
+        "name": "This will go",
+        "size": "Regular",
+        "price": 456
+      },
+      {
+        "name": "This will go",
+        "size": "Large",
+        "price": 533
+      }
+    ],
+    "total": 989,
+    "status": "Received",
+    "timestamp": "2024-01-06T08:04:01.196Z"
   }
 ]

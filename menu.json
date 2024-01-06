@@ -16,7 +16,8 @@
         "name": "Large",
         "price": 12.99
       }
-    ]
+    ],
+    "outOfStock": true
   },
   {
     "id": 2,
@@ -31,7 +32,8 @@
         "name": "Large",
         "price": 9.99
       }
-    ]
+    ],
+    "outOfStock": false
   },
   {
     "id": 3,
@@ -95,16 +97,27 @@
   },
   {
     "id": 7,
-    "name": "Nwachukwu Sauce",
-    "description": "A chicken broth made with x, yz, things. Slow cooked in charcoal beef.",
+    "name": "Heyyyy",
+    "description": "Please good.",
+    "sizes": [],
+    "outOfStock": false
+  },
+  {
+    "id": 8,
+    "name": "This will go",
+    "description": "This is a fine meal. Eat it.",
     "sizes": [
       {
-        "name": "Meal",
-        "price": 20
+        "name": "Regular",
+        "price": 456,
+        "stripeProductId": "prod_PK5VZOTgA777m2",
+        "productPriceOnStripeId": "price_1OVRK9L4pn7XXHF5oWaRqyfu"
       },
       {
-        "name": "2L",
-        "price": 30
+        "name": "Large",
+        "price": 533,
+        "stripeProductId": "prod_PK5VSFBcQAODlm",
+        "productPriceOnStripeId": "price_1OVRKAL4pn7XXHF5NgeCluYC"
       }
     ]
   }
