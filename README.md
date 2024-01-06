@@ -2,15 +2,12 @@
 
 To run;
 
-to open the frontend:
-```py
-python -m http.server
-```
-
 for backend:
 ```cmd
 > yarn|npm run start
 ```
+
+> Open localhost:3000
 
 
 ### TODOs

@@ -101,5 +101,24 @@
     "description": "Please good.",
     "sizes": [],
     "outOfStock": false
+  },
+  {
+    "id": 8,
+    "name": "This will go",
+    "description": "This is a fine meal. Eat it.",
+    "sizes": [
+      {
+        "name": "Regular",
+        "price": 456,
+        "stripeProductId": "prod_PK5VZOTgA777m2",
+        "productPriceOnStripeId": "price_1OVRK9L4pn7XXHF5oWaRqyfu"
+      },
+      {
+        "name": "Large",
+        "price": 533,
+        "stripeProductId": "prod_PK5VSFBcQAODlm",
+        "productPriceOnStripeId": "price_1OVRKAL4pn7XXHF5NgeCluYC"
+      }
+    ]
   }
 ]
