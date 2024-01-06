@@ -9,6 +9,11 @@ for backend:
 
 > Open localhost:3000
 
+ To deploy to heroku:
+
+ ```cmd
+ git push heroku main
+ ```
 
 ### TODOs
 02.01.2024

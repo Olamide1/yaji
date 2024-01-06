@@ -6,9 +6,9 @@ const fs = require("fs");
 
 const _BASE_URL =
   process.env.NODE_ENV === "production"
-    ? "https://<some-name>.herokuapp.com"
+    ? "https://sth-here-3c1f4d8efc12.herokuapp.com/"
     : process.env.NODE_ENV === "staging"
-    ? "https://<some-name>.herokuapp.com"
+    ? "https://sth-here-3c1f4d8efc12.herokuapp.com/"
     : "http://localhost:3000";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
