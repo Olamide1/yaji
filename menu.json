@@ -16,7 +16,8 @@
         "name": "Large",
         "price": 12.99
       }
-    ]
+    ],
+    "outOfStock": true
   },
   {
     "id": 2,
@@ -31,7 +32,8 @@
         "name": "Large",
         "price": 9.99
       }
-    ]
+    ],
+    "outOfStock": false
   },
   {
     "id": 3,
@@ -92,5 +94,12 @@
         "price": 25
       }
     ]
+  },
+  {
+    "id": 7,
+    "name": "Heyyyy",
+    "description": "Please good.",
+    "sizes": [],
+    "outOfStock": false
   }
 ]

@@ -1,11 +1,27 @@
+require('dotenv').config()
+const path = require('path');
+
 const express = require('express');
 const fs = require('fs');
+
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, {
+    apiVersion: '2022-08-01',
+    appInfo: {
+        // For sample support and debugging, not required for production:
+        name: 'stripe-checkout-test-v1',
+        version: '0.0.1',
+        url: 'https://github.com/Olamide1/kb',
+    },
+})
+
 const cors = require('cors'); // Import CORS module
 const app = express();
 const port = 3000;
 
-app.use(cors()); // Enable CORS for all routes
+app.use(cors());
 app.use(express.json());
+
+app.use(express.static("."));
 
 app.post('/submit-order', (req, res) => {
     const newOrder = req.body;
@@ -20,10 +36,11 @@ app.post('/submit-order', (req, res) => {
         orders.push({...newOrder, timestamp: new Date()});
         fs.writeFile('orders.json', JSON.stringify(orders), (err) => {
             if (err) {
-                res.status(500).send('Error writing file');
-                return;
+                res.status(500).json({message: 'Issue taking your order...', err});
+            } else {
+                res.json({ message: 'Order saved successfully' });
             }
-            res.json({ message: 'Order saved successfully' });
+            
         });
     });
 });
@@ -38,8 +55,27 @@ app.get('/get-orders', (req, res) => {
     });
 });
 
-app.post('/add-menu-item', (req, res) => {
+app.post('/add-menu-item', async (req, res) => {
     const newItem = req.body; // Your new menu item from the request
+    
+
+    /**
+     * also create on stripe
+     * 
+     * TODO: (https://stripe.com/docs/api/products/create)
+     * 1. add images
+     */
+    const productOnStripe = await stripe.products.create({
+        name: req.body.name,
+        description: req.body.description,
+        metadata: {
+            biz: 'yaji_lagos', // don't change this!
+            product_type: 'food_menu'
+        }
+    });
+
+    newItem.stripeProductId = productOnStripe.id
+    
     // Read the current menu from menu.json
     fs.readFile('menu.json', (err, data) => {
         if (err) throw err;
@@ -48,9 +84,12 @@ app.post('/add-menu-item', (req, res) => {
         newItem.id = menu.length + 1; // Simple example to generate a new ID
         menu.push(newItem);
         // Write the updated menu back to menu.json
-        fs.writeFile('menu.json', JSON.stringify(menu, null, 2), (err) => {
-            if (err) throw err;
-            res.send('New item added successfully');
+        fs.writeFile('menu.json', JSON.stringify(menu, null, 2), 'utf-8',(err) => {
+            if (err) {
+                res.status(500).json({message: 'Error adding menu', err})
+            } else {
+                res.json({message: 'New item added successfully'});
+            }
         });
     });
 });
@@ -64,14 +103,37 @@ app.post('/save-menu', async (req, res) => {
         const menuFilePath = 'menu.json';
 
         // Write the menu data to the menu.json file
-        await fs.writeFile(menuFilePath, JSON.stringify(menuData, null, 2));
-
-        // Respond with a success message
-        res.status(200).json({ message: 'Menu data saved successfully' });
+        fs.writeFile(menuFilePath, JSON.stringify(menuData, null, 2), 'utf-8', (err) => {
+            if (err) {
+                res.status(500).json({ message: 'Error saving menu data', err });
+            } else {
+                // Respond with a success message
+                res.status(200).json({ message: 'Menu data saved successfully' });
+            }
+        });
+        
     } catch (error) {
         console.error('Error saving menu data:', error);
         // Respond with an error message
         res.status(500).json({ error: 'Error saving menu data' });
+    }
+});
+
+app.get('/menu', async (req, res) => {
+    try {
+        fs.readFile('menu.json', (err, data) => {
+            if (err) {
+                res.status(500).send('Error reading file');
+            } else {
+                res.json(JSON.parse(data))
+            }
+            
+        });
+        
+    } catch (error) {
+        console.error('Error getting menu data:', error);
+        // Respond with an error message
+        res.status(500).json({ error: 'Error getting menu data' });
     }
 });
 
@@ -100,11 +162,12 @@ app.post('/update-order-status/:orderId', (req, res) => {
                 fs.writeFile('orders.json', JSON.stringify(orders, null, 2), 'utf8', (err) => {
                     if (err) {
                         console.error('Error updating order status:', err);
-                        res.status(500).json({ error: 'Error updating order status' });
-                        return;
+                        res.status(500).json({ message: 'Error updating order status', err });
+                    } else {
+                        res.json(orders[orderIndex]); // Return the updated order as JSON
                     }
 
-                    res.json(orders[orderIndex]); // Return the updated order as JSON
+                    
                 });
             } else {
                 res.status(404).json({ error: 'Order not found' });
@@ -130,9 +193,15 @@ app.post('/update-menu', async (req, res) => {
         // Replace the menu data with the updated data
         // You can add more robust logic for merging or validating the data as needed
         // For simplicity, this example replaces the entire menu data
-        await fs.writeFile('menu.json', JSON.stringify(updatedMenuData, null, 2), 'utf8');
+        fs.writeFile('menu.json', JSON.stringify(updatedMenuData, null, 2), 'utf8', (err) => {
+            if (err) {
+                res.status(500).json({message: 'Error updating menu', err});
+            } else {
+                res.status(200).json({message: 'Menu data updated successfully'});
+            }
+        });
 
-        res.status(200).send('Menu data updated successfully');
+        
     } catch (error) {
         console.error('Error updating menu data:', error);
         res.status(500).send('Internal Server Error');
@@ -140,7 +209,35 @@ app.post('/update-menu', async (req, res) => {
 });
 
 
+app.get('/admin', async (req, res) => {
+    const options = {
+        root: __dirname
+    };
+    const fileName = 'admin.html'
+    res.sendFile(fileName, options, function (err) {
+        if (err) {
+            res.json({message: 'Oops', err})
+            console.error('Error sending file:', err);
+        } else {
+            console.log('Sent:', fileName);
+        }
+    })
+})
 
+app.get('/', async (req, res) => {
+    const options = {
+        root: __dirname
+    };
+    const fileName = 'index.html'
+    res.sendFile(fileName, options, function (err) {
+        if (err) {
+            res.json({message: 'Oops', err})
+            console.error('Error sending file:', err);
+        } else {
+            console.log('Sent:', fileName);
+        }
+    })
+})
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
