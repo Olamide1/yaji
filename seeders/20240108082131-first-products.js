@@ -81,6 +81,7 @@ module.exports = {
       }]);
     } catch (error) {
       console.error('error seeding up', __filename);
+      console.error('with error', error);
     }
   },
 
@@ -108,6 +109,7 @@ module.exports = {
       }, {});
     } catch (error) {
       console.error('error seeding down', __filename);
+      console.error('with error', error);
     }
 
 
