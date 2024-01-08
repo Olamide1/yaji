@@ -40,16 +40,12 @@ function displayOrders(orders) {
     ordersContainer.innerHTML = ''; // Clear out any existing content
 
     /**
-     * We're no longer doing:
-     * "Sort orders by the timestamp of the last item in the 'items' array in descending order (most recent first)"
-     * 
-     * We're just sorting by the time the order arrived. Since not all orders have a timestamp value, we're chaining it optionally.
+     * TODO: sort orders in BE by created_at
      */
-    orders
-    .filter((o) => !!o.stripeSessionId)
-    .sort((a, b) => {
-        return new Date(a?.timestamp) - new Date(b?.timestamp);
-    });
+
+    if (orders?.length === 0) {
+        ordersContainer.innerHTML = 'No orders'
+    }
 
     orders.forEach(order => {
         const orderDiv = document.createElement('div');
