@@ -35,27 +35,50 @@ body {
     z-index: 2;
 }
 
-/* Button styling - assuming primary color is set in Bulma */
+/* Button and input group styling */
+.field.has-addons .control,
+.field.has-addons .button,
+.field.has-addons .input {
+  margin-right: 0; /* Remove any default right margins */
+}
+
+.field.has-addons .button {
+  padding: 0.25rem; /* Smaller padding to reduce button size */
+  justify-content: center; /* Center content within buttons */
+  align-items: center; /* Align SVG vertically */
+  display: flex; /* Use flexbox for button contents */
+  width: 2.5em; /* Fixed width for buttons */
+}
+
+.field.has-addons .input {
+  text-align: center; /* Center the text inside the input */
+  width: 3em; /* Set a fixed width for the input */
+}
+
+/* SVG styling */
+svg {
+  fill: white; /* Ensure SVG icons are white */
+  width: 1em; /* Reduce SVG size to fit buttons */
+  height: 1em; /* Match width and height for uniformity */
+}
+
+/* Read-only input styling */
+.input[readonly] {
+  background-color: #f5f5f5; /* Light grey to indicate non-editability */
+  color: #5755d9; /* Primary color for text */
+}
+
+/* Primary button color adjustments, if different from default Bulma */
 .button.is-primary {
-    /* If you want to customize the primary color */
-    background-color: #5755d9; /* Your primary color */
-    color: white;
-  }
-  
-  .button.is-primary:hover {
-    background-color: #4845c7; /* Darker shade for hover state */
-  }
-  
-  /* Input styling - aligned with the primary color scheme */
-  .input.is-primary {
-    border-color: #5755d9;
-  }
-  
-  /* Making sure the readonly input has the same text color as the buttons */
-  .input[readonly] {
-    color: #5755d9;
-    background-color: #f5f5f5; /* Light grey to indicate non-editability */
-  }
+  background-color: #5755d9; /* Your primary color */
+  border-color: #5755d9; /* Border to match the background */
+}
+
+.button.is-primary:hover {
+  background-color: #4845c7; /* Darker shade for hover state */
+  border-color: #4845c7;
+}
+
   
   /* Total display at the bottom */
   .total-display {
