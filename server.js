@@ -80,6 +80,9 @@ app.get("/get-orders", async (req, res) => {
 
   try {
     const _orders = await db.order.findAll({
+      where: {
+        payment_confirmed: true,
+      },
       include: [
         {
           model: db.orderitem,
