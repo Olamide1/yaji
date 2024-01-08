@@ -250,10 +250,21 @@ app.post(
     // res.sendStatus(200)
     // return
 
+    /**
+     * customer name can be different. Multiple times order (without sign up).
+     * But usually same email. Fix if email isn't same.
+     * 
+     * Should we create customers on stripe?? Yes. v2.
+     * 
+     * Should we update the customer name if it's different???
+     * TODO: maybe Let's save the name that was used to place the order somewhere.
+     */
     const [customer, isCustomerCreated] = await db.customer.findOrCreate({ 
       where: {
-        name: name,
         email: email,
+      },
+      defaults: {
+        name: name
       }
     });
 
