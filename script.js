@@ -94,7 +94,7 @@ async function updateValue(input, action) {
 function updateTotal() {
     let total = 0;
     document.querySelectorAll('.quantity-input').forEach(item => {
-        console.log('item', item)
+        // console.log('item', item)
         total += parseInt(item.value) * parseFloat(item.dataset.price);
     });
     document.getElementById('total').value = total.toFixed(2);
@@ -130,7 +130,7 @@ document.getElementById('orderForm-not-use') // not using this for now.
 
     // Collecting ordered items
     document.querySelectorAll('.item-size:checked').forEach(item => {
-        console.log('what item', item)
+        // console.log('what item', item)
         const itemContainer = item.closest('.menu-item');
         const itemName = itemContainer.querySelector('.menu-item-title').innerText;
         const itemSize = item.dataset.value;

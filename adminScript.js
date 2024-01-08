@@ -21,8 +21,6 @@ function displayMetrics() {
     fetch(`${_BASE_URL}/get-order-metrics`)
     .then(response => response.json())
     .then(order_stat => {
-        console.log('order_stat', order_stat)
-
         const metricsContainer = document.getElementById('metrics');
         
         let _content = '<h2 class="title is-4">Order Metrics</h2>'
@@ -335,7 +333,7 @@ async function saveMenuData(menuData) {
 
 // Function to toggle "Out of Stock" status
 async function toggleOutOfStock(itemId, new_out_of_stock_status) {
-    console.log('calling toggleOutOfStock', itemId)
+    // console.log('calling toggleOutOfStock', itemId)
 
     try {
         const response = await fetch(`${_BASE_URL}/update-menu-out-of-stock`, { 
@@ -348,7 +346,6 @@ async function toggleOutOfStock(itemId, new_out_of_stock_status) {
         if (!response.ok) {
             throw new Error('Failed to update menu data');
         }
-        console.log('res', response)
 
         populateMenuList() // update the menu. We need to start using loaders.
     } catch (error) {
