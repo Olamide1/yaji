@@ -20,13 +20,13 @@ async function displayMenu(menu) {
     const menuContainer = document.getElementById('menu');
     menu.forEach(item => {
         const itemDiv = document.createElement('div');
+        const isOutOfStock = item?.out_of_stock ? 'disabled' : ''
         itemDiv.className = 'menu-item';
         itemDiv.innerHTML = `
-            <h3 class="menu-item-title">${item.name}</h3>
+            <h3 class="menu-item-title">${item.name} ${item?.out_of_stock ? ' - OUT OF STOCK' : ''}</h3>
             <!-- Added a specific class -->
             <p>${item.description}</p>
             <div class="sizes">
-
 
                 ${item?.submenus.map((size) =>
                     `
@@ -35,6 +35,7 @@ async function displayMenu(menu) {
                     <div class="field is-grouped">
                         <p class="control mr-0">
                             <button 
+                            ${isOutOfStock}
                             onclick="updateValue(${size.stripe_product_price_id}, 'decrement')"
                             type="button" class="button is-link mt-0">
                             ${minusSvg}
@@ -42,6 +43,7 @@ async function displayMenu(menu) {
                         </p>
                         <p class="control mr-0">
                         <input 
+                        ${isOutOfStock}
                         class="input is-primary mb-0 quantity-input"
                         step="1"
                         name="${size?.stripe_product_price_id}" 
@@ -49,6 +51,7 @@ async function displayMenu(menu) {
                         </p>
                         <p class="control">
                             <button 
+                            ${isOutOfStock}
                             onclick="updateValue(${size.stripe_product_price_id}, 'increment')"
                             type="button" class="button is-danger mt-0">
                             ${plusSvg}
