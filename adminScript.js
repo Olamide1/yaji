@@ -1,32 +1,36 @@
 // Function to fetch and display orders
 function fetchOrders() {
-    fetch('http://localhost:3000/get-orders') // Replace with your server endpoint
+    fetch('http://localhost:3000/get-orders')
     .then(response => response.json())
     .then(orders => {
         displayOrders(orders)
-        displayMetrics(orders); // Add this line
 
-    }        
-        )
+        displayMetrics(); // todo: move this some where else.
+    })
     .catch(error => console.error('Error fetching orders:', error));
 }
-// Function to display metrics
-function displayMetrics(orders) {
-    const metricsContainer = document.getElementById('metrics');
-    const totalOrders = orders.length;
-    const statusCounts = orders.reduce((acc, order) => {
-        acc[order.status] = (acc[order.status] || 0) + 1;
-        return acc;
-    }, {});
 
-    metricsContainer.innerHTML = `
-        <h2 class="title is-4">Order Metrics</h2>
-        <p><strong>Total Orders:</strong> ${totalOrders}</p>
-        <p><strong>Received:</strong> ${statusCounts['Received'] || 0}</p>
-        <p><strong>In Progress:</strong> ${statusCounts['In Progress'] || 0}</p>
-        <p><strong>Sent:</strong> ${statusCounts['Sent'] || 0}</p>
-        <p><strong>Delivered:</strong> ${statusCounts['Delivered'] || 0}</p>
-    `;
+// Function to display metrics
+function displayMetrics() {
+    fetch('http://localhost:3000/get-order-metrics')
+    .then(response => response.json())
+    .then(order_stat => {
+        console.log('order_stat', order_stat)
+
+        const metricsContainer = document.getElementById('metrics');
+        
+        let _content = '<h2 class="title is-4">Order Metrics</h2>'
+        order_stat.forEach((_stat) => {
+            _content += `
+                <p><strong>${_stat.status}</strong> ${_stat.count}</p>
+            `;
+        })
+
+        metricsContainer.innerHTML = _content
+    })
+    .catch(error => console.error('Error fetching order stat:', error));
+    
+
 }
 
 
@@ -41,7 +45,9 @@ function displayOrders(orders) {
      * 
      * We're just sorting by the time the order arrived. Since not all orders have a timestamp value, we're chaining it optionally.
      */
-    orders.sort((a, b) => {
+    orders
+    .filter((o) => !!o.stripeSessionId)
+    .sort((a, b) => {
         return new Date(a?.timestamp) - new Date(b?.timestamp);
     });
 
@@ -49,27 +55,28 @@ function displayOrders(orders) {
         const orderDiv = document.createElement('div');
         orderDiv.className = 'order box'; // 'box' is a Bulma class for a card-like container
         orderDiv.innerHTML = `
-            <h3 class="title is-4">Order by ${order.name}</h3>
-            <p><strong>Email:</strong> ${order.email}</p>
+            <h3 class="title is-4">Order by ${order.customer.name}</h3>
+            <p><strong>Email:</strong> ${order.customer.email}</p>
             <p><strong>Phone:</strong> ${order.phone}</p>
-            <p><strong>Address:</strong> ${order.address}</p>
+            <p><strong>Address:</strong> ${order.addresses?.[0]?.full_address}</p>
             <p><strong>Items:</strong></p>
 
             <ul>
-                ${order.items.map(item => `
-                    <li>${item.name} (${item.size}) - $${item.price.toFixed(2)}</li>
+                ${order?.orderitems?.map((item, i) => `
+                    <li>${item.submenus[0].menu.name} (${item.submenus[0].name}) - $${item.submenus[0].price.toFixed(2)} - x${item.quantity}</li>
                 `).join('')}
             </ul>
-            <p><strong>Total:</strong> $${order.total.toFixed(2)}</p>
+            <p><strong>Total:</strong> $${order?.total?.toFixed(2)}</p>
             <div class="field">
                 <label class="label">Status</label>
                 <div class="control">
                     <div class="select is-fullwidth">
                         <select class="status-selector" data-order-id="${order.id}">
-                            <option value="Received" ${order.status === 'Received' ? 'selected' : ''}>Received</option>
-                            <option value="In Progress" ${order.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
-                            <option value="Sent" ${order.status === 'Sent' ? 'selected' : ''}>Sent</option>
-                            <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                            <option value="received" ${order.status === 'received' ? 'selected' : ''}>Received</option>
+                            <option value="in_progress" ${order.status === 'in_progress' ? 'selected' : ''}>In Progress</option>
+                            <option value="sent" ${order.status === 'sent' ? 'selected' : ''}>Sent</option>
+                            <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                            <option value="failed" ${order.status === 'failed' ? 'selected' : ''}>Sent</option>
                         </select>
                     </div>
                 </div>
@@ -94,7 +101,7 @@ function updateOrderStatus(orderId, newStatus, orders) {
     fetch(`http://localhost:3000/update-order-status/${orderId}`, {
         method: 'POST', // Use POST instead of PUT
         body: JSON.stringify({ status: newStatus }),
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
     })
     .then(response => {
         if (!response.ok) {
@@ -104,13 +111,7 @@ function updateOrderStatus(orderId, newStatus, orders) {
     })
     .then(updatedOrder => {
         // Update the order status in your local data
-        const orderIndex = orders.findIndex(order => order.id === orderId);
-        if (orderIndex !== -1) {
-            orders[orderIndex].status = updatedOrder.status;
-        }
-
-        // Update the order display
-        displayOrders(orders);
+        // maybe return the new status of the total deliveries.
     })
     .catch(error => {
         console.error('Error:', error);
@@ -150,6 +151,8 @@ function addSizePriceInput() {
     sizePriceGroup.querySelector('.delete-size').addEventListener('click', function() {
         sizePriceGroup.remove();
     });
+
+    // TODO: we need to also be able to edit previous menus. and submenus.
 }
 
 
@@ -168,7 +171,7 @@ function handleMenuFormSubmit(event) {
     const newItemId = generateUniqueId();
 
     const newItem = {
-        id: newItemId, // Include the "id" field
+        // id: newItemId, // Include the "id" field // not using it for now.
         name: itemName,
         description: itemDescription,
         sizes: sizes
@@ -184,7 +187,7 @@ function handleMenuFormSubmit(event) {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('Server response was not ok');
         }
         return response.text();
     })
@@ -193,6 +196,9 @@ function handleMenuFormSubmit(event) {
         alert('New item added successfully');
         // Reset the form
         document.getElementById('menuForm').reset();
+
+        // populate menu list with new item.
+        populateMenuList()
     })
     .catch((error) => {
         console.error('Error:', error);
@@ -256,13 +262,16 @@ async function populateMenuList() {
             const listItem = document.createElement('li');
             const priceText = item.price ? `$${item.price.toFixed(2)}` : ''; // Check for the existence of the price property
             listItem.innerHTML = `
-                ${item.name} - ${priceText}
-                <button class="button is-small" onclick="toggleOutOfStock(${item.id})">
-                    ${item.outOfStock ? 'Mark as In Stock' : 'Mark as Out of Stock'}
+                ${item.name} ${priceText}
+                -
+                <button class="button is-small" onclick="toggleOutOfStock(${item.id}, ${!item.out_of_stock})">
+                    ${item.out_of_stock ? 'Mark as In Stock' : 'Mark as Out of Stock'}
                 </button>
             `;
 
             menuList.appendChild(listItem);
+
+            // TODO: show the list of submenus.
         });
     } catch (error) {
         console.error('Error populating menu list:', error);
@@ -318,30 +327,48 @@ async function saveMenuData(menuData) {
 
 
 // Function to toggle "Out of Stock" status
-async function toggleOutOfStock(itemId) {
-    console.log('calling toggleOutOfStock')
+async function toggleOutOfStock(itemId, new_out_of_stock_status) {
+    console.log('calling toggleOutOfStock', itemId)
+
+    try {
+        const response = await fetch('http://localhost:3000/update-menu-out-of-stock', { 
+            method: 'POST', 
+            body: JSON.stringify({ menu_id: itemId, out_of_stock: new_out_of_stock_status }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Failed to update menu data');
+        }
+        console.log('res', response)
+
+        populateMenuList() // update the menu. We need to start using loaders.
+    } catch (error) {
+        console.error('Error fetching menu data:', error);
+    }
     
     // Fetch the menu data from menu.json
-    let menu = await fetchMenuData()
-    const itemIndex = menu.findIndex((item) => item.id === itemId);
+    // let menu = await fetchMenuData()
+    // const itemIndex = menu.findIndex((item) => item.id === itemId);
 
-    if (itemIndex > -1) {
-        let item = menu[itemIndex]
-        console.log('found item', item)
+    // if (itemIndex > -1) {
+    //     let item = menu[itemIndex]
+    //     console.log('found item', item)
         
-        item.outOfStock = !item.outOfStock; // Toggle the status
-        // Save the updated menu data to menu.json
+    //     item.outOfStock = !item.outOfStock; // Toggle the status
+    //     // Save the updated menu data to menu.json
 
-        // TODO: replace properly here.
-        menu[itemIndex] = item // DONE: replaced here.
-        saveMenuData(menu)
+    //     // TODO: replace properly here.
+    //     menu[itemIndex] = item // DONE: replaced here.
+    //     saveMenuData(menu)
 
-        // Update the menu list display
-        populateMenuList()
+    //     // Update the menu list display
+    //     populateMenuList()
 
-    } else {
-        console.error('did not find item with id', itemId)
-    }
+    // } else {
+    //     console.error('did not find item with id', itemId)
+    // }
 
 }
 

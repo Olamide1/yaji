@@ -4,6 +4,24 @@ const path = require("path");
 const express = require("express");
 const fs = require("fs");
 
+const db = require('./models')
+
+// only for development
+// db.sequelize
+// .sync({force: true})
+// .then(
+//   (_done) => {
+//     console.log(`Done syncing tables`);
+//   },
+//   (_err) => {
+//     console.error(`err syncing tables:\n\n`, _err);
+//   }
+// )
+// .catch((_reason) => {
+//   // catches .VIRTUAL data type when altering db
+//   console.error(`caught this error while syncing tables:\n\n`, _reason);
+// });
+
 const _BASE_URL =
   process.env.NODE_ENV === "production"
     ? "https://sth-here-3c1f4d8efc12.herokuapp.com"
@@ -56,14 +74,57 @@ app.post("/submit-order", (req, res) => {
   });
 });
 
-app.get("/get-orders", (req, res) => {
-  fs.readFile("orders.json", (err, data) => {
-    if (err) {
-      res.status(500).send("Error reading file");
-      return;
-    }
-    res.json(JSON.parse(data));
-  });
+app.get("/get-orders", async (req, res) => {
+  
+
+  try {
+    const _orders = await db.order.findAll({
+      include: [
+        {
+          model: db.orderitem,
+          // where: {}
+          include: [{
+            model: db.submenu,
+            include: db.menu
+          }]
+        },
+        {
+          model: db.customer,
+        },
+        {
+          model: db.address,
+        },
+      ],
+      order: [
+        ['created_at', 'DESC']
+      ],
+    })
+  
+    res.json(_orders);
+  } catch (error) {
+    console.log('what errro?', error);
+    res.sendStatus(500)
+  }
+  
+});
+
+app.get("/get-order-metrics", async (req, res) => {
+
+  try {
+    // https://stackoverflow.com/a/49575496/9259701
+    let _orders_stat = await db.order.count({
+      attributes: ['status'], 
+      group: 'status',
+    })
+
+    // _orders_stat.map((stat) => ({...stat, status: stat.status.replace('_', ' ')}))
+  
+    res.json(_orders_stat);
+  } catch (error) {
+    console.log('what errro?', error);
+    res.sendStatus(500)
+  }
+  
 });
 
 app.post("/add-menu-item", async (req, res) => {
@@ -71,6 +132,15 @@ app.post("/add-menu-item", async (req, res) => {
     // TODO: there must be a sizes available
 
     let newItem = req.body; // Your new menu item from the request
+
+    console.log('newItem', newItem)
+
+    const newMenu = await db.menu.create({ 
+      description: newItem.description, name: newItem.name
+    })
+
+    // res.sendStatus(200)
+    // return;
 
     /**
      * also create on stripe
@@ -96,7 +166,7 @@ app.post("/add-menu-item", async (req, res) => {
 
         unit_label: "Meal", // or 'Order'?
 
-        // default_price_data: {}, // we are making a separate request to create a new price object?
+        // default_price_data: {}, // we are making a separate request to create a new price object
         shippable: true,
       });
 
@@ -118,29 +188,41 @@ app.post("/add-menu-item", async (req, res) => {
 
       // set the Stripe product related price id in the size object
       newItem.sizes[i].productPriceOnStripeId = productPriceOnStripe.id;
+
+      // create submenu in db
+      const newSubmenu = await db.submenu.create({ 
+        menuId: newMenu.id,
+        name: size.name,
+        stripe_product_id: productOnStripe.id,
+        stripe_product_price_id: productPriceOnStripe.id,
+        price: size.price
+      })
     }
 
+    res.json({ message: "New item added successfully" });
+
+    // no longer using .json.
     // Read the current menu from menu.json
-    fs.readFile("menu.json", (err, data) => {
-      if (err) throw err;
-      let menu = JSON.parse(data);
-      // Add the new item with a new unique id
-      newItem.id = menu.length + 1; // Simple example to generate a new ID
-      menu.push(newItem);
-      // Write the updated menu back to menu.json
-      fs.writeFile(
-        "menu.json",
-        JSON.stringify(menu, null, 2),
-        "utf-8",
-        (err) => {
-          if (err) {
-            res.status(500).json({ message: "Error adding menu", err });
-          } else {
-            res.json({ message: "New item added successfully" });
-          }
-        }
-      );
-    });
+    // fs.readFile("menu.json", (err, data) => {
+    //   if (err) throw err;
+    //   let menu = JSON.parse(data);
+    //   // Add the new item with a new unique id
+    //   newItem.id = menu.length + 1; // Simple example to generate a new ID
+    //   menu.push(newItem);
+    //   // Write the updated menu back to menu.json
+    //   fs.writeFile(
+    //     "menu.json",
+    //     JSON.stringify(menu, null, 2),
+    //     "utf-8",
+    //     (err) => {
+    //       if (err) {
+    //         res.status(500).json({ message: "Error adding menu", err });
+    //       } else {
+    //         res.json({ message: "New item added successfully" });
+    //       }
+    //     }
+    //   );
+    // });
   } catch (error) {
     res.status(500).json({ message: "Error adding menu", error });
   }
@@ -156,33 +238,78 @@ app.post(
      */
     const newOrder = req.body;
 
+    /**
+     * @type {{stripe_price_id: quantity, ...}} orders
+     */
+    const {address, phone, email, name, total, ...orders} = newOrder
+
     console.log("newOrder", newOrder);
 
-    if (!newOrder.food_menu) {
-      res.status(500).json({ message: "Must order for something" });
+    console.log("orders", orders);
 
-      return;
-    }
+    // res.sendStatus(200)
+    // return
 
-    let orderOnStripe = null;
-
-    if (Array.isArray(newOrder.food_menu)) {
-      orderOnStripe = newOrder.food_menu?.map((item) => ({
-        price: item,
-        quantity: 1,
-      }));
-
-      if (orderOnStripe?.length < 1) {
-        res.sendStatus(500);
-
-        return;
+    const [customer, isCustomerCreated] = await db.customer.findOrCreate({ 
+      where: {
+        name: name,
+        email: email,
       }
-    } else if (typeof newOrder.food_menu === "string") {
-      orderOnStripe = [{ quantity: 1, price: newOrder.food_menu }];
-    } else {
-      // nothing else.
-      // return error?
+    });
+
+    const [newAddress, isNewAddressCreated] = await db.address.findOrCreate({ 
+      where: {
+        full_address: address,
+        customerId: customer.id,
+      }
+    });
+
+    const newMealOrder = await db.order.create({ 
+      addressId: newAddress.id,
+      customerId: customer.id,
+      phone: phone,
+      total: parseFloat(total)
+    });
+
+    // link the address to the order
+    const linkedAddr = await db.orderaddress.create({ 
+      addressId: newAddress.id,
+      orderId: newMealOrder.id,
+    });
+    console.log('<<<<<<< linkedAddr', linkedAddr);
+
+    let orderOnStripe = [];
+    for (const [key, value] of Object.entries(orders)) {
+      // link the order items to the submenu (that was ordered)
+      if (parseInt(value) > 0) { // only save items with quantity greater than 0
+        const _sub_menu = await db.submenu.findOne({ where: { stripe_product_price_id: key } });
+
+        console.log('>>>>>>> created _sub_menu', _sub_menu);
+        const orderItem = await db.orderitem.create({
+          orderId: newMealOrder.id,
+          quantity: parseInt(value)
+        })
+
+        console.log('------- created orderItem', orderItem);
+
+        // link the order item, to the submenu item
+        const order_item_submenu = await db.orderitemsubmenu.create({
+          orderitemId: orderItem.id,
+          submenuId: _sub_menu.id,
+        })
+        console.log('+++++++ order_item_submenu', order_item_submenu);
+
+        orderOnStripe.push({ quantity: parseInt(value), price: key })
+      }
+      // console.log(`${key}: ${value}`);
     }
+
+    if (orderOnStripe.length === 0) {
+      // no food item was selected, so no order can be made.
+      res.status(200).json({message: 'Please select at least one menu item.'})
+      return
+    }
+    
 
     console.log("orderOnStripe", orderOnStripe);
 
@@ -218,7 +345,13 @@ app.post(
 
       // TODO: pass shipping params to checkout session
 
+      // save the order here.
+
       console.log("session", session);
+
+      // Save the stripe session id in the stripe_session_id of an order
+      newMealOrder.stripe_session_id = session.id;
+      await newMealOrder.save();
 
       // 303 redirect to session.url
       res.redirect(303, session.url);
@@ -268,20 +401,36 @@ app.get("/menu", async (req, res) => {
 
     // console.log('what we have', prices)
 
-    fs.readFile("menu.json", "utf-8", (err, data) => {
-      if (err) {
-        res.status(500).send("Error reading file");
-      } else {
-        // todo: filter the ones without stipe data
+    const _menus = await db.menu.findAll({
+      // TODO: nested query, where submenu stripe price/product id not null.
+      // where: {
 
-        const _data = JSON.parse(data)?.filter(
-          (m) =>
-            m?.sizes?.length > 0 &&
-            m?.sizes?.every((i) => !!i?.productPriceOnStripeId)
-        );
-        res.json(_data);
-      }
+      // }
+      // we don't need this include.
+      include: [
+        {
+          model: db.submenu,
+          // where: ...
+        },
+      ]
     });
+
+    res.json(_menus); // use .toJSON() ??
+
+    // fs.readFile("menu.json", "utf-8", (err, data) => {
+    //   if (err) {
+    //     res.status(500).send("Error reading file");
+    //   } else {
+    //     // todo: filter the ones without stipe data
+
+    //     const _data = JSON.parse(data)?.filter(
+    //       (m) =>
+    //         m?.sizes?.length > 0 &&
+    //         m?.sizes?.every((i) => !!i?.productPriceOnStripeId)
+    //     );
+    //     res.json(_data);
+    //   }
+    // });
   } catch (error) {
     console.error("Error getting menu data:", error);
     // Respond with an error message
@@ -289,51 +438,39 @@ app.get("/menu", async (req, res) => {
   }
 });
 
+app.post('/update-menu-out-of-stock', async (req, res) => {
+  console.log('req.body', req.body)
+  
+  try {
+    await db.menu.update({ out_of_stock: req.body.out_of_stock }, {
+      where: {
+        id: req.body.menu_id,
+      }
+    });
+
+    res.sendStatus(200)
+  } catch (error) {
+    res.sendStatus(500)
+  }
+})
+
 // Endpoint to update order status
 app.post("/update-order-status/:orderId", (req, res) => {
-  const orderId = req.params.orderId;
-  const newStatus = req.body.status;
 
-  // Read the orders data from orders.json
-  fs.readFile("orders.json", "utf8", (err, data) => {
-    if (err) {
-      console.error("Error reading orders data:", err);
-      res.status(500).json({ error: "Error reading orders data" });
-      return;
-    }
+  try {
+    const orderId = req.params.orderId;
+    const newStatus = req.body.status;
 
-    try {
-      let orders = JSON.parse(data); // Parse the JSON data
+    db.order.update({status: newStatus}, {
+      where: {
+        id: orderId
+      },
+    })
 
-      // Find the order in the orders array and update its status
-      const orderIndex = orders.findIndex((order) => order.id === orderId);
-      if (orderIndex !== -1) {
-        orders[orderIndex].status = newStatus;
-
-        // Write the updated orders data back to orders.json
-        fs.writeFile(
-          "orders.json",
-          JSON.stringify(orders, null, 2),
-          "utf8",
-          (err) => {
-            if (err) {
-              console.error("Error updating order status:", err);
-              res
-                .status(500)
-                .json({ message: "Error updating order status", err });
-            } else {
-              res.json(orders[orderIndex]); // Return the updated order as JSON
-            }
-          }
-        );
-      } else {
-        res.status(404).json({ error: "Order not found" });
-      }
-    } catch (parseError) {
-      console.error("Error parsing orders data:", parseError);
-      res.status(500).json({ error: "Error parsing orders data" });
-    }
-  });
+    res.sendStatus(200)
+  } catch (error) {
+    res.sendStatus(500)
+  }
 });
 
 app.post("/update-menu", async (req, res) => {
@@ -398,9 +535,43 @@ app.get("/", async (req, res) => {
 app.get("/success-order", async (req, res) => {
   console.log("req.query", req.query);
 
-  const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
+  if (!req.query.session_id) {
+    res.status(500).json({message: 'Invalid URL'})
+    return;
+  }
 
-  // console.log("what is session", session);
+  // what are we doing with this?
+  const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
+  console.log("what is session", session);
+
+  // save the payment status as paid? Important TODO: Use webhook to do this. Only save if it's false.
+  // TODO: don't use stripe session id later, let's use our own id?
+  // TODO: let's find a way to know when a session has already been used. Find it first, then conditionally update
+  
+  const _order_session = await db.order.findOne({ 
+    where: {
+      stripe_session_id: req.query.session_id,
+      // payment_confirmed: false
+    } 
+  });
+
+  if (_order_session === null) {
+    res.status(500).json({message: 'That order doesn\'t exist.'})
+
+    return;
+  } else if (_order_session.payment_confirmed === true) {
+    res.status(500).json({message: 'That order has been received.'})
+
+    return;
+  }
+  
+  await db.order.update(
+    { payment_confirmed: true }, {
+    where: {
+      stripe_session_id: req.query.session_id,
+      payment_confirmed: false
+    }
+  });
 
   const options = {
     root: __dirname,

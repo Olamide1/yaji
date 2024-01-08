@@ -96,13 +96,6 @@ body {
     margin-bottom: 5px;
 }
 
-/* Total Cost Display */
-#total {
-    font-size: 1.2rem;
-    text-align: right;
-    margin-top: 20px;
-}
-
 /* Responsive Design - Mobile First */
 @media screen and (min-width: 768px) {
     .container {

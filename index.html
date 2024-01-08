@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Food Order</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <section class="hero is-primary is-bold">
         <div class="hero-body">
@@ -19,20 +21,33 @@
             </div>
         </div>
     </section>
-    
-    
-    
-    
+
+
+
+
     <section class="container section">
         <div class="container">
             <h1 class="title has-text-black">Yaji Lagos - Place Your Order</h1>
 
             <form id="orderForm" method="post" action="/payment">
-                    
-                <div id="menu"></div>
-                <p id="total">Total: $0.00</p>
 
-            
+                <div id="menu"></div>
+
+
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                      <label class="label" for="total">Total:</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <p class="control">
+                            <input class="input" type="number" placeholder="0.00" name="total" id="total" required readonly>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+
                 <input class="input" type="text" placeholder="Name" name="name" id="name" required>
                 <input class="input" type="email" placeholder="Email" name="email" id="email" required>
                 <input class="input" type="tel" placeholder="Phone Number" name="phone" id="phone" required>
@@ -43,15 +58,16 @@
     </section>
     <script src="script.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-    // Scroll to order form
-    const orderButton = document.querySelector('.hero .button');
-    orderButton.addEventListener('click', function(event) {
-        event.preventDefault();
-        document.getElementById('orderForm').scrollIntoView({ behavior: 'smooth' });
-    });
-});
+        document.addEventListener("DOMContentLoaded", function () {
+            // Scroll to order form
+            const orderButton = document.querySelector('.hero .button');
+            orderButton.addEventListener('click', function (event) {
+                event.preventDefault();
+                document.getElementById('orderForm').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
 
     </script>
 </body>
+
 </html>
