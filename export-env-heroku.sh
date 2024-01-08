@@ -7,9 +7,9 @@
 
 while read line;
 do
-if [[ $line == "#"* ]] || [[ $line == "" ]] ;
+if [[ $line == "#"* ]] || [[ $line == "" ]] || [[ $line == "DEV_"* ]] || [[ $line == "NODE_ENV"* ]] ;
 then
-    echo "skipping comment or empty line";
+    echo "skipping comment or empty line or dev/local env";
 else
     echo "writing" $line;
     # heroku config:set GITHUB_USERNAME=joesmith
