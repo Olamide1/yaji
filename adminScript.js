@@ -63,7 +63,7 @@ function displayOrders(orders) {
 
             <ul>
                 ${order?.orderitems?.map((item, i) => `
-                    <li>${item.submenus[0].menu.name} (${item.submenus[0].name}) - $${item.submenus[0].price.toFixed(2)} - x${item.quantity}</li>
+                    <li>${item.submenus[0].menu.name} (${item.submenus[0].name}) - $${item.submenus[0].price.toFixed(2)} - (quantity: ${item.quantity})</li>
                 `).join('')}
             </ul>
             <p><strong>Total:</strong> $${order?.total?.toFixed(2)}</p>
