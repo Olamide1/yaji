@@ -29,14 +29,14 @@ module.exports = {
   
   },
   production: {
-    "username": process.env.SHARED_HOST_MYSQL_DB_USERNAME,
-    "user": process.env.SHARED_HOST_MYSQL_DB_USERNAME, // knex uses 'user'
-    "password": process.env.SHARED_HOST_MYSQL_DB_PASSWORD,
-    "database": process.env.SHARED_HOST_MYSQL_PROD_DB_NAME,
-    "host": process.env.SHARED_HOST,
-    "dialect": "mysql",
+    "username": process.env.PROD_DB_USERNAME,
+    "user": process.env.PROD_DB_USERNAME, // knex uses 'user'
+    "password": process.env.PROD_DB_PASSWORD,
+    "database": process.env.PROD_DB_NAME,
+    "host": process.env.PROD_DB_HOSTNAME,
+    "dialect": process.env.PROD_DB_DIALECT,
     
-    "port": 3306,
+    "port": process.env.PROD_DB_PORT,
     "ssl": true,
     "dialectOptions": {
         "ssl": {
