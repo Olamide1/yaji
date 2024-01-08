@@ -34,9 +34,6 @@ module.exports = (sequelize, DataTypes) => {
         isEmail: true,
       }
     },
-    address: {
-      type: DataTypes.STRING,
-    },
   }, {
     sequelize,
     modelName: 'customer',

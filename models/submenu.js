@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
     },
-    menuId: {
+    menu_id: {
       type: DataTypes.INTEGER,
       // TODO: Add references later
       // references: {}

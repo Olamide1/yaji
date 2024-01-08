@@ -20,8 +20,8 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
     },
-    orderitemId: DataTypes.INTEGER,
-    submenuId: DataTypes.INTEGER
+    orderitem_id: DataTypes.INTEGER,
+    submenu_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'orderitemsubmenu',

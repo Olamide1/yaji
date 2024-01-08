@@ -20,8 +20,12 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
     },
-    address_id: DataTypes.INTEGER,
-    order_id: DataTypes.INTEGER
+    address_id: {
+      type: DataTypes.INTEGER,
+    },
+    order_id: {
+      type: DataTypes.INTEGER
+    },
   }, {
     sequelize,
     modelName: 'orderaddress',

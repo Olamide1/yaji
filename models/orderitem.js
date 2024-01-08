@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
         isInt: true,
       }
     },
-    orderId: {
+    order_id: {
       type: DataTypes.INTEGER,
     },
   }, {
