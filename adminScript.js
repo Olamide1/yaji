@@ -20,11 +20,16 @@ function displayMetrics() {
         const metricsContainer = document.getElementById('metrics');
         
         let _content = '<h2 class="title is-4">Order Metrics</h2>'
-        order_stat.forEach((_stat) => {
-            _content += `
-                <p><strong>${_stat.status}</strong> ${_stat.count}</p>
-            `;
-        })
+
+        if (order_stat?.length === 0) {
+            _content += 'No metrics yet.'
+        } else {
+            order_stat.forEach((_stat) => {
+                _content += `
+                    <p><strong>${_stat.status}</strong> ${_stat.count}</p>
+                `;
+            })
+        }
 
         metricsContainer.innerHTML = _content
     })
@@ -45,50 +50,51 @@ function displayOrders(orders) {
 
     if (orders?.length === 0) {
         ordersContainer.innerHTML = 'No orders'
-    }
-
-    orders.forEach(order => {
-        const orderDiv = document.createElement('div');
-        orderDiv.className = 'order box'; // 'box' is a Bulma class for a card-like container
-        orderDiv.innerHTML = `
-            <h3 class="title is-4">Order by ${order.customer.name}</h3>
-            <p><strong>Email:</strong> ${order.customer.email}</p>
-            <p><strong>Phone:</strong> ${order.phone}</p>
-            <p><strong>Address:</strong> ${order.addresses?.[0]?.full_address}</p>
-            <p><strong>Items:</strong></p>
-
-            <ul>
-                ${order?.orderitems?.map((item, i) => `
-                    <li>${item.submenus[0].menu.name} (${item.submenus[0].name}) - $${item.submenus[0].price.toFixed(2)} - (quantity: ${item.quantity})</li>
-                `).join('')}
-            </ul>
-            <p><strong>Total:</strong> $${order?.total?.toFixed(2)}</p>
-            <div class="field">
-                <label class="label">Status</label>
-                <div class="control">
-                    <div class="select is-fullwidth">
-                        <select class="status-selector" data-order-id="${order.id}">
-                            <option value="received" ${order.status === 'received' ? 'selected' : ''}>Received</option>
-                            <option value="in_progress" ${order.status === 'in_progress' ? 'selected' : ''}>In Progress</option>
-                            <option value="sent" ${order.status === 'sent' ? 'selected' : ''}>Sent</option>
-                            <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
-                            <option value="failed" ${order.status === 'failed' ? 'selected' : ''}>Sent</option>
-                        </select>
+    } else {
+        orders.forEach(order => {
+            const orderDiv = document.createElement('div');
+            orderDiv.className = 'order box'; // 'box' is a Bulma class for a card-like container
+            orderDiv.innerHTML = `
+                <h3 class="title is-4">Order by ${order.customer.name}</h3>
+                <p><strong>Email:</strong> ${order.customer.email}</p>
+                <p><strong>Phone:</strong> ${order.phone}</p>
+                <p><strong>Address:</strong> ${order.addresses?.[0]?.full_address}</p>
+                <p><strong>Items:</strong></p>
+    
+                <ul>
+                    ${order?.orderitems?.map((item, i) => `
+                        <li>${item.submenus[0].menu.name} (${item.submenus[0].name}) - $${item.submenus[0].price.toFixed(2)} - (quantity: ${item.quantity})</li>
+                    `).join('')}
+                </ul>
+                <p><strong>Total:</strong> $${order?.total?.toFixed(2)}</p>
+                <div class="field">
+                    <label class="label">Status</label>
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select class="status-selector" data-order-id="${order.id}">
+                                <option value="received" ${order.status === 'received' ? 'selected' : ''}>Received</option>
+                                <option value="in_progress" ${order.status === 'in_progress' ? 'selected' : ''}>In Progress</option>
+                                <option value="sent" ${order.status === 'sent' ? 'selected' : ''}>Sent</option>
+                                <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                                <option value="failed" ${order.status === 'failed' ? 'selected' : ''}>Sent</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
-        ordersContainer.appendChild(orderDiv);
-
-        const statusSelector = orderDiv.querySelector('.status-selector');
-        statusSelector.addEventListener('change', () => {
-            const newStatus = statusSelector.value;
-            const orderId = statusSelector.getAttribute('data-order-id');
-
-            // Send a request to update the order status
-            updateOrderStatus(orderId, newStatus, orders);
+            `;
+            ordersContainer.appendChild(orderDiv);
+    
+            const statusSelector = orderDiv.querySelector('.status-selector');
+            statusSelector.addEventListener('change', () => {
+                const newStatus = statusSelector.value;
+                const orderId = statusSelector.getAttribute('data-order-id');
+    
+                // Send a request to update the order status
+                updateOrderStatus(orderId, newStatus, orders);
+            });
         });
-    });
+    }
+
 }
 
 
