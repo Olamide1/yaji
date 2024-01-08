@@ -1,6 +1,12 @@
+const _BASE_URL =
+window.location.protocol === "https:"
+    ? "https://sth-here-3c1f4d8efc12.herokuapp.com"
+    : "http://localhost:3000";
+
+
 // Function to fetch and display orders
 function fetchOrders() {
-    fetch('http://localhost:3000/get-orders')
+    fetch(`${_BASE_URL}/get-orders`)
     .then(response => response.json())
     .then(orders => {
         displayOrders(orders)
@@ -12,7 +18,7 @@ function fetchOrders() {
 
 // Function to display metrics
 function displayMetrics() {
-    fetch('http://localhost:3000/get-order-metrics')
+    fetch(`${_BASE_URL}/get-order-metrics`)
     .then(response => response.json())
     .then(order_stat => {
         console.log('order_stat', order_stat)
@@ -100,7 +106,7 @@ function displayOrders(orders) {
 
 function updateOrderStatus(orderId, newStatus, orders) {
     // Send a request to the server to update the order status
-    fetch(`http://localhost:3000/update-order-status/${orderId}`, {
+    fetch(`${_BASE_URL}/update-order-status/${orderId}`, {
         method: 'POST', // Use POST instead of PUT
         body: JSON.stringify({ status: newStatus }),
         headers: { 'Content-Type': 'application/json' },
@@ -180,7 +186,7 @@ function handleMenuFormSubmit(event) {
     };
 
     // Send the newItem as JSON data in the request body
-    fetch('http://localhost:3000/add-menu-item', { 
+    fetch(`${_BASE_URL}/add-menu-item`, { 
         method: 'POST', 
         body: JSON.stringify(newItem), // Ensure newItem is properly formatted JSON
         headers: {
@@ -223,7 +229,6 @@ function handleStatusChange(event) {
     // TODO: Implement the logic to send the updated status to the server
     // This typically involves a fetch request with method 'POST' or 'PUT'
     console.log(`Order ID ${orderId} status updated to ${newStatus}`);
-    // Example: fetch('http://localhost:3000/update-order-status', { ... });
 }
 
 // Initialize the fetch orders function
@@ -283,7 +288,7 @@ async function populateMenuList() {
 // Function to fetch menu data from menu.json
 async function fetchMenuData() {
     try {
-        const response = await fetch('http://localhost:3000/menu', { 
+        const response = await fetch(`${_BASE_URL}/menu`, { 
             method: 'GET', 
             headers: {
                 'Content-Type': 'application/json' // Set the content type
@@ -308,7 +313,7 @@ async function saveMenuData(menuData) {
      * Also, should it return data?
      */
     try {
-        const response = await fetch('http://localhost:3000/save-menu', { 
+        const response = await fetch(`${_BASE_URL}/save-menu`, { 
             method: 'POST', 
             body: JSON.stringify(menuData), // Ensure menuData is properly formatted JSON
             headers: {
@@ -333,7 +338,7 @@ async function toggleOutOfStock(itemId, new_out_of_stock_status) {
     console.log('calling toggleOutOfStock', itemId)
 
     try {
-        const response = await fetch('http://localhost:3000/update-menu-out-of-stock', { 
+        const response = await fetch(`${_BASE_URL}/update-menu-out-of-stock`, { 
             method: 'POST', 
             body: JSON.stringify({ menu_id: itemId, out_of_stock: new_out_of_stock_status }),
             headers: {

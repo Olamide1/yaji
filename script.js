@@ -1,8 +1,13 @@
+const _BASE_URL =
+window.location.protocol === "https:"
+    ? "https://sth-here-3c1f4d8efc12.herokuapp.com"
+    : "http://localhost:3000";
+
 // Fetching menu items from menu.json
 function fetchMenu() {
     
     
-    fetch('http://localhost:3000/menu')
+    fetch(`${_BASE_URL}/menu`)
         .then(response => response.json())
         .then(menu => displayMenu(menu))
         .catch(error => console.error('Error fetching menu:', error));
@@ -146,7 +151,7 @@ document.getElementById('orderForm-not-use') // not using this for now.
     order.total = order.items.reduce((acc, item) => acc + item.price, 0);
 
     // Submitting the order to the server
-    fetch('http://localhost:3000/submit-order', { // Replace with your server's URL
+    fetch(`${_BASE_URL}/submit-order`, { // Replace with your server's URL
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
