@@ -116,7 +116,13 @@ app.get("/get-order-metrics", async (req, res) => {
 
   try {
     // https://stackoverflow.com/a/49575496/9259701
-    let _orders_stat = await db.order.count({
+    let _orders_stat = await db.order
+    findAll({
+      where: {
+        payment_confirmed: true
+      }
+    })
+    .count({
       attributes: ['status'], 
       group: 'status',
     })
