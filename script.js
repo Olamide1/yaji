@@ -32,31 +32,34 @@ async function displayMenu(menu) {
                     `
                     <span>${size.name} - $${size.price}</span>
 
-                    <div class="field is-grouped">
+                    <div class="field is-grouped is-grouped-centered">
                     <p class="control">
                       <button 
                         onclick="updateValue('${size.stripe_product_price_id}', 'decrement')"
-                        type="button" class="button is-primary">
-                        ${minusSvg}
+                        type="button" 
+                        class="button is-small is-primary">
+                        -
                       </button>
                     </p>
                     <p class="control">
                       <input 
-                        class="input is-primary quantity-input"
+                        class="input is-small is-primary"
+                        type="number"
                         step="1"
                         name="${size?.stripe_product_price_id}" 
                         id="${size?.stripe_product_price_id}" 
                         min="0" 
                         data-price="${size.price}" 
-                        value="0" 
-                        type="number" 
-                        placeholder="0">
+                        value="0"
+                        placeholder="0"
+                        readonly>
                     </p>
                     <p class="control">
                       <button 
                         onclick="updateValue('${size.stripe_product_price_id}', 'increment')"
-                        type="button" class="button is-primary">
-                        ${plusSvg}
+                        type="button" 
+                        class="button is-small is-primary">
+                        +
                       </button>
                     </p>
                   </div>`

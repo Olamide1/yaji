@@ -35,31 +35,33 @@ body {
     z-index: 2;
 }
 
-/* Quantity input field styling */
-.quantity-input {
-    text-align: center;
-  }
-  
-  /* Button styling - Primary color for both buttons */
-  .button.is-primary {
-    /* If you want to override Bulma's primary color */
+/* Button styling - assuming primary color is set in Bulma */
+.button.is-primary {
+    /* If you want to customize the primary color */
     background-color: #5755d9; /* Your primary color */
-    border-color: #5755d9; /* Consistent border color */
+    color: white;
   }
   
   .button.is-primary:hover {
     background-color: #4845c7; /* Darker shade for hover state */
-    border-color: #4845c7;
   }
   
-/* Custom CSS for Bulma elements */
-
-/* Readonly input field styling */
-.input[readonly] {
-    background-color: #f5f5f5; /* Light grey background to indicate non-editability */
-    color: #363636; /* Using Bulma's readable dark text color */
-    cursor: not-allowed; /* Shows a 'not allowed' cursor on hover */
-    box-shadow: none; /* Overrides Bulma's input shadow if any */
+  /* Input styling - aligned with the primary color scheme */
+  .input.is-primary {
+    border-color: #5755d9;
+  }
+  
+  /* Making sure the readonly input has the same text color as the buttons */
+  .input[readonly] {
+    color: #5755d9;
+    background-color: #f5f5f5; /* Light grey to indicate non-editability */
+  }
+  
+  /* Total display at the bottom */
+  .total-display {
+    font-size: 1.25rem; /* Larger font size for total display */
+    text-align: right; /* Align the total to the right */
+    color: #5755d9; /* Use the primary color for the total */
   }
   
   /* If you want to apply the primary color to the label */
