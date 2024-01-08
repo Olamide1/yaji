@@ -24,9 +24,6 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
     },
-    name: {
-      type: DataTypes.STRING
-    },
     email: {
       type: DataTypes.STRING,
       unique: true,
@@ -39,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'customer',
     timestamps: true,
     underscored: true,
+    comment: 'Usually to hold the unique emails of our users.'
   });
   // Customer.sync({ alter: true })
   return Customer;

@@ -51,13 +51,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true,
     },
-    phone: {
+    customer_phone: {
       type: DataTypes.STRING,
+      comment: 'The phone number the customer made the order with'
     },
-    customerId: { // link to a customer.
+    customer_name: {
+      type: DataTypes.STRING,
+      comment: 'The name the customer used when making the order'
+    },
+    customer_id: { // link to a customer.
       type: DataTypes.INTEGER,
     },
-    addressId: {
+    address_id: {
       type: DataTypes.INTEGER,
       comment: 'The address used for this order',
     },

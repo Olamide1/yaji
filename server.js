@@ -1,5 +1,6 @@
 require("dotenv").config();
 const path = require("path");
+const { Op } = require('sequelize')
 
 const express = require("express");
 const fs = require("fs");
@@ -263,9 +264,7 @@ app.post(
       where: {
         email: email,
       },
-      defaults: {
-        name: name
-      }
+      defaults: {}
     });
 
     const [newAddress, isNewAddressCreated] = await db.address.findOrCreate({ 
@@ -278,8 +277,9 @@ app.post(
     const newMealOrder = await db.order.create({ 
       addressId: newAddress.id,
       customerId: customer.id,
-      phone: phone,
-      total: parseFloat(total)
+      customer_phone: phone,
+      customer_name: name,
+      total: parseFloat(total), // TODO: maybe calculate this here in BE.
     });
 
     // link the address to the order
@@ -413,15 +413,18 @@ app.get("/menu", async (req, res) => {
     // console.log('what we have', prices)
 
     const _menus = await db.menu.findAll({
-      // TODO: nested query, where submenu stripe price/product id not null.
-      // where: {
-
-      // }
-      // we don't need this include.
       include: [
         {
           model: db.submenu,
-          // where: ...
+          // nested query, where submenu stripe price/product id not null.
+          where: {
+            stripe_product_id: {
+              [Op.not]: null
+            },
+            stripe_product_price_id: {
+              [Op.not]: null
+            },
+          }
         },
       ]
     });

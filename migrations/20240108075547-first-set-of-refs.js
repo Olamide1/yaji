@@ -79,7 +79,27 @@ module.exports = {
           field: 'id',
       },
     })
-    
+
+    await queryInterface.addConstraint('orders', {
+      fields: ['customer_id'],
+      type: 'foreign key',
+      name: '8_cus_id_fkey_ref_customers_tmd',
+      references: {
+          table: 'customers',
+          field: 'id',
+      },
+    })
+
+    await queryInterface.addConstraint('orders', {
+      fields: ['address_id'],
+      type: 'foreign key',
+      name: '9_addr_id_fkey_ref_addresses_zsd',
+      references: {
+          table: 'addresses',
+          field: 'id',
+      },
+    })
+
   },
 
   async down (queryInterface, Sequelize) {
@@ -117,6 +137,16 @@ module.exports = {
     await queryInterface.removeConstraint(
       'orderitemsubmenus',
       '7_smenu_id_fkey_ref_submenus_dkl'
+    )
+
+    await queryInterface.removeConstraint(
+      'orders',
+      '8_cus_id_fkey_ref_customers_tmd'
+    )
+
+    await queryInterface.removeConstraint(
+      'orders',
+      '9_addr_id_fkey_ref_addresses_zsd'
     )
   }
 };

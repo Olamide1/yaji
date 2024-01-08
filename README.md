@@ -9,26 +9,30 @@ for backend:
 
 > Open localhost:3000
 
- To deploy to heroku:
+To deploy to heroku:
 
- ```cmd
- git push heroku main
- ```
+```cmd
+git push heroku main
+```
 
- To see heroku logs
- ```cmd
- heroku logs -n 1500 --app sth-here >> heroku.logs
- ```
+To see heroku logs
+```cmd
+heroku logs -n 1500 --app sth-here >> heroku.logs
+```
 
- See the app here:
- sth-here-3c1f4d8efc12.herokuapp.com
+See the app here:
+sth-here-3c1f4d8efc12.herokuapp.com
 
- ### Common Sequelize commands
+### Common Sequelize commands
 
- 1. Generate a migration file.
+1. Generate a migration file.
  ```cmd
  npx sequelize-cli migration:generate --name migration-file-name
  ```
+2. Generate a seed file
+```cmd
+npx sequelize-cli seed:generate --name first-products
+```
 
 ### TODOs
 02.01.2024

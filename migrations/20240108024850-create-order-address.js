@@ -11,17 +11,9 @@ module.exports = {
       },
       address_id: {
         type: Sequelize.INTEGER,
-        references: {
-          table: 'addresses',
-          field: 'id'
-        },
       },
       order_id: {
         type: Sequelize.INTEGER,
-        references: {
-          table: 'orders',
-          field: 'id'
-        },
       },
       created_at: {
         allowNull: false,
