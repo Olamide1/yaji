@@ -25,7 +25,8 @@ module.exports = {
       "min": 0,
       "acquire": 30000,
       "idle": 10000
-    }
+    },
+    "seederStorage": "sequelize", // save seeding history
   
   },
   production: {
@@ -49,6 +50,7 @@ module.exports = {
       "min": 0,
       "acquire": 30000,
       "idle": 10000
-    }
+    },
+    "seederStorage": "sequelize", // save seeding history
   }
 }

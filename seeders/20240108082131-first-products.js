@@ -16,7 +16,7 @@ module.exports = {
 
     try {
       // menus
-      await queryInterface.bulkInsert('menus', [{
+      const result = await queryInterface.bulkInsert('menus', [{
         id: 1,
         name: 'Rice & Beans',
         description: 'This is the real rice and beans.',
@@ -31,6 +31,8 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date()
       }]);
+
+      console.log('what entered', result)
 
       // submenus
       await queryInterface.bulkInsert('submenus', [{
