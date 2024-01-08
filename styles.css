@@ -35,6 +35,21 @@ body {
     z-index: 2;
 }
 
+/* Custom CSS for Bulma elements */
+
+/* Readonly input field styling */
+.input[readonly] {
+    background-color: #f5f5f5; /* Light grey background to indicate non-editability */
+    color: #363636; /* Using Bulma's readable dark text color */
+    cursor: not-allowed; /* Shows a 'not allowed' cursor on hover */
+    box-shadow: none; /* Overrides Bulma's input shadow if any */
+  }
+  
+  /* If you want to apply the primary color to the label */
+  .label {
+    color: #5755d9; /* Adjust the color to match your theme */
+  }
+  
 
 
 /* Container - Leveraging Bulma */

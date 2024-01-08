@@ -33,28 +33,33 @@ async function displayMenu(menu) {
                     <span>${size.name} - $${size.price}</span>
 
                     <div class="field is-grouped">
-                        <p class="control mr-0">
-                            <button 
-                            onclick="updateValue(${size.stripe_product_price_id}, 'decrement')"
-                            type="button" class="button is-link mt-0">
-                            ${minusSvg}
-                            </button>
-                        </p>
-                        <p class="control mr-0">
-                        <input 
-                        class="input is-primary mb-0 quantity-input"
+                    <p class="control">
+                      <button 
+                        onclick="updateValue('${size.stripe_product_price_id}', 'decrement')"
+                        type="button" class="button is-primary">
+                        ${minusSvg}
+                      </button>
+                    </p>
+                    <p class="control">
+                      <input 
+                        class="input is-primary quantity-input"
                         step="1"
                         name="${size?.stripe_product_price_id}" 
-                        id="${size?.stripe_product_price_id}" min="0" data-price="${size.price}" value="0" type="number" placeholder="0">
-                        </p>
-                        <p class="control">
-                            <button 
-                            onclick="updateValue(${size.stripe_product_price_id}, 'increment')"
-                            type="button" class="button is-danger mt-0">
-                            ${plusSvg}
-                            </button>
-                        </p>
-                    </div>`
+                        id="${size?.stripe_product_price_id}" 
+                        min="0" 
+                        data-price="${size.price}" 
+                        value="0" 
+                        type="number" 
+                        placeholder="0">
+                    </p>
+                    <p class="control">
+                      <button 
+                        onclick="updateValue('${size.stripe_product_price_id}', 'increment')"
+                        type="button" class="button is-primary">
+                        ${plusSvg}
+                      </button>
+                    </p>
+                  </div>`
                 ).join('')}
 
             </div>
