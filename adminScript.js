@@ -109,9 +109,9 @@ function updateOrderStatus(orderId, newStatus, orders) {
         }
         return response.json();
     })
-    .then(updatedOrder => {
-        // Update the order status in your local data
-        // maybe return the new status of the total deliveries.
+    .then(() => {
+        // update statuses of the total deliveries.
+        displayMetrics()
     })
     .catch(error => {
         console.error('Error:', error);
