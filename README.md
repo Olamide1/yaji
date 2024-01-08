@@ -23,6 +23,13 @@ for backend:
  See the app here:
  sth-here-3c1f4d8efc12.herokuapp.com
 
+ ### Common Sequelize commands
+
+ 1. Generate a migration file.
+ ```cmd
+ npx sequelize-cli migration:generate --name migration-file-name
+ ```
+
 ### TODOs
 02.01.2024
 * In admin, navigate to menu list, and the out of stock issue.
