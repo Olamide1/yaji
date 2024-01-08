@@ -116,19 +116,15 @@ app.get("/get-order-metrics", async (req, res) => {
 
   try {
     // https://stackoverflow.com/a/49575496/9259701
-    let _orders_stat = await db.order
-    findAll({
-      where: {
-        payment_confirmed: true
-      }
-    })
+    const _orders_stat = await db.order
     .count({
+      where: {
+        payment_confirmed: 1
+      },
       attributes: ['status'], 
       group: 'status',
     })
 
-    // _orders_stat.map((stat) => ({...stat, status: stat.status.replace('_', ' ')}))
-  
     res.json(_orders_stat);
   } catch (error) {
     console.log('what errro?', error);
@@ -574,7 +570,6 @@ app.get("/success-order", async (req, res) => {
   const _order_session = await db.order.findOne({ 
     where: {
       stripe_session_id: req.query.session_id,
-      // payment_confirmed: false
     } 
   });
 
@@ -588,13 +583,8 @@ app.get("/success-order", async (req, res) => {
     return;
   }
   
-  await db.order.update(
-    { payment_confirmed: true }, {
-    where: {
-      stripe_session_id: req.query.session_id,
-      payment_confirmed: false
-    }
-  });
+  _order_session.payment_confirmed = true;
+  _order_session.save()
 
   const options = {
     root: __dirname,
