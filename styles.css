@@ -35,6 +35,23 @@ body {
     z-index: 2;
 }
 
+/* Quantity input field styling */
+.quantity-input {
+    text-align: center;
+  }
+  
+  /* Button styling - Primary color for both buttons */
+  .button.is-primary {
+    /* If you want to override Bulma's primary color */
+    background-color: #5755d9; /* Your primary color */
+    border-color: #5755d9; /* Consistent border color */
+  }
+  
+  .button.is-primary:hover {
+    background-color: #4845c7; /* Darker shade for hover state */
+    border-color: #4845c7;
+  }
+  
 /* Custom CSS for Bulma elements */
 
 /* Readonly input field styling */
