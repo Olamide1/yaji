@@ -26,6 +26,8 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'orderitemsubmenu',
     underscored: true,
+    updatedAt: 'updated_at',
+    createdAt: 'created_at'
   });
   // OrderitemSubmenu.sync({ alter: true })
   return OrderitemSubmenu;

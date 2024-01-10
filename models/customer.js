@@ -36,7 +36,9 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'customer',
     timestamps: true,
     underscored: true,
-    comment: 'Usually to hold the unique emails of our users.'
+    comment: 'Usually to hold the unique emails of our users.',
+    updatedAt: 'updated_at',
+    createdAt: 'created_at'
   });
   // Customer.sync({ alter: true })
   return Customer;

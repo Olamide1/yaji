@@ -30,6 +30,8 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'orderaddress',
     underscored: true,
+    updatedAt: 'updated_at',
+    createdAt: 'created_at'
   });
   // OrderAddress.sync({ alter: true })
   return OrderAddress;

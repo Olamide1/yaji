@@ -47,6 +47,8 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'address',
     timestamps: true,
     underscored: true,
+    updatedAt: 'updated_at',
+    createdAt: 'created_at'
   });
   // Address.sync({ alter: true })
   return Address;

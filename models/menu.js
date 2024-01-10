@@ -38,6 +38,8 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'menu',
     timestamps: true,
     underscored: true,
+    updatedAt: 'updated_at',
+    createdAt: 'created_at',
   });
   // Menu.sync({ alter: true })
   return Menu;

@@ -78,6 +78,8 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'order',
     timestamps: true,
     underscored: true,
+    updatedAt: 'updated_at',
+    createdAt: 'created_at'
   });
   // Order.sync({ alter: true })
   return Order;

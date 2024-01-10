@@ -59,9 +59,9 @@ function displayOrders(orders) {
             const orderDiv = document.createElement('div');
             orderDiv.className = 'order box'; // 'box' is a Bulma class for a card-like container
             orderDiv.innerHTML = `
-                <h3 class="title is-4">Order by ${order.customer.name}</h3>
+                <h3 class="title is-4">Order by ${order.customer_name}</h3>
                 <p><strong>Email:</strong> ${order.customer.email}</p>
-                <p><strong>Phone:</strong> ${order.phone}</p>
+                <p><strong>Phone:</strong> ${order.customer_phone}</p>
                 <p><strong>Address:</strong> ${order.addresses?.[0]?.full_address}</p>
                 <p><strong>Items:</strong></p>
     
