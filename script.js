@@ -21,7 +21,7 @@ async function displayMenu(menu) {
     menu.forEach((item) => {
         const itemDiv = document.createElement('div');
         const isOutOfStock = item?.out_of_stock ? 'disabled' : ''
-        itemDiv.className = 'column ';
+        itemDiv.className = 'column is-one-third';
         itemDiv.innerHTML = `
                 <div class="card">
 
@@ -39,25 +39,23 @@ async function displayMenu(menu) {
                         </div>
                     </div>
 
-                        <div class="content has-text-grey">
-                            <p class="subtitle has-text-grey-dark">
-                            
-                            </p>
+                        <div class="content has-text-grey is-flex is-flex-direction-column" style="gap: 15px">
+                    
         
                             ${item?.submenus.map((size) =>
                                 `
-                                <div class="columns">
-                                <div class="column is-6">
+                                <div class="is-flex is-flex-direction-row is-justify-content-space-between is-align-items-center" style="gap: 10px">
+                                <div class="is-flex-grow-1">
                                     <p class="">${size.name} - $${size.price}</p>
                                 </div>
-                                <div class="column is-6">
-                                    <div class="field is-grouped menu-control">
+                                <div class="">
+                                    <div class="is-flex is-flex-direction-row">
                                         <button
                                         title="+, more"
                                         ${isOutOfStock}
                                         onclick="updateValue(${size.stripe_product_price_id}, 'decrement')" 
                                         type="button"
-                                        class="button is-link mt-0 is-flex-grow-1">
+                                        class="button is-link mt-0 ">
                                             <span class="icon is-small">
                                                 <i class="fa-solid fa-minus"></i>
                                             </span>
@@ -65,21 +63,21 @@ async function displayMenu(menu) {
 
                                         <input 
                                         step="1"
-                                        
+                                        style="width: 50px"
                                         ${isOutOfStock}
                                         name="${size?.stripe_product_price_id}" 
                                         id="${size?.stripe_product_price_id}"
                                         data-price="${size?.price}"
                                         placeholder="0"
                                         min="0"
-                                        class="input is-radiusless mb-0 is-flex-grow-1 quantity-input" 
+                                        class="input is-radiusless mb-0  quantity-input middle-input" 
                                         type="number" value="0" readonly>
                                         
                                         <button 
                                         ${isOutOfStock}
                                         onclick="updateValue(${size.stripe_product_price_id}, 'increment')"
                                         type="button"
-                                        class="button is-danger mt-0 is-flex-grow-1">
+                                        class="button is-danger mt-0 ">
                                             <span class="icon is-small">
                                                 <i class="fa-solid fa-plus"></i>
                                             </span>

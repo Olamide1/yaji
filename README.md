@@ -39,6 +39,16 @@ npx sequelize-cli seed:generate --name first-products
 * In admin, navigate to menu list, and the out of stock issue.
 * Add payments.
 * List orders by most recent.
+* Have a 404 page, we don't have a page for that url, but we have these meals...
+
+### Design Inspirations
+* Tell the 3 step process. Like [this](https://dribbble.com/shots/23193838-Food-Delivery-Web-Landing-Page-UI)
+* Show menus. Like [this](https://dribbble.com/shots/15856903-Food-Delivery-Landing-page/attachments/7678659?mode=media)
+    * Use this [blog component](https://components.bulma-css.com/components/blog)
+    * Or this [shopping component](https://components.bulma-css.com/components/shopping)
+    * Should this [list component](https://components.bulma-css.com/components/list) be used for mobile view?
+* ... they pay with Stripe.
+* Pick out components from [here](https://components.bulma-css.com/components).
 
 
 #### Later TODO:

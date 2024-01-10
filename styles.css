@@ -1,108 +1,131 @@
 body {
     font-family: 'Segoe UI', 'Roboto', sans-serif;
-    background-color: #FAFAFA;
-    color: #333;
-    line-height: 1.5;
-    padding: 10px;
+    /* background-color: #FAFAFA; */
+    /* color: #333; */
+    /* line-height: 1.5; */
+
+    
+}
+html {
+    scroll-behavior: smooth;
+}
+.menu-control > * {
+    /* height: 30px; */
+}
+
+.middle-input {
+    padding-bottom: 0px;
+    padding-left: 13px;
+    padding-right: 0px;
+    padding-top: 0px;
 }
 
 /* Hero Section Styles */
 .hero {
-    position: relative;
-    color: rgb(224, 99, 99);
-    padding: 3rem 0;
-    text-align: center;
+    /* position: relative; */
+    /* color: rgb(224, 99, 99); */
+    /* padding: 3rem 0; */
+    /* text-align: center; */
 }
 
 /* Full-width background image with overlay effect */
 .hero-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-size: cover;
-    background-position: center;
-    z-index: 1;
+    /* position: absolute; */
+    /* top: 0; */
+    /* left: 0; */
+    /* right: 0; */
+    /* bottom: 0; */
+    /* background-size: cover; */
+    /* background-position: center; */
+    /* z-index: 1; */
+
+
     /* Overlay effect */
-    background-color: rgba(240, 3, 3, 0.5); /* Dark overlay with opacity */
-    mix-blend-mode: normal; /* Ensures the overlay darkens the image */
+
+    /* Dark overlay with opacity */
+    background-color: rgba(240, 3, 3, 0.5);
+    
+    /* Ensures the overlay darkens the image */
+    /* mix-blend-mode: normal; */
 }
 
 /* Container and text styling to ensure they are above the image */
 .hero .container {
-    position: relative;
-    z-index: 2;
+    /* position: relative; */
+    /* z-index: 2; */
 }
 
 
 
 /* Container - Leveraging Bulma */
 .container {
-    max-width: 100%;
-    padding: 15px;
-    margin: 0 auto;
+    /* max-width: 100%; */
+    /* padding: 15px; */
+    /* margin: 0 auto; */
 }
 
 /* Typography - Simplified and Responsive */
 .title {
-    font-size: 1.5rem;
-    color: #5755d9; /* Primary color */
-    margin-bottom: 15px;
-    text-align: center;
+    /* font-size: 1.5rem; */
+    /* Primary color */
+
+    /* color: #5755d9; */
+    /* margin-bottom: 15px; */
+    /* text-align: center; */
 }
 
 /* Form Styles - Enhanced for mobile usability */
 .input, .textarea {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    /* width: 100%; */
+    /* padding: 12px; */
+    /* margin-bottom: 10px; */
+    /* border: 1px solid #ddd; */
+    /* border-radius: 4px; */
 }
 
 .button {
-    width: 100%;
-    background-color: #5755d9;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    margin-top: 10px;
+    /* width: 100%; */
+    /* background-color: #5755d9; */
+    /* color: white; */
+    /* padding: 10px; */
+    /* border: none; */
+    /* border-radius: 4px; */
+    /* margin-top: 10px; */
 }
 
 .button:hover {
-    background-color: #4845c7;
+    /* background-color: #4845c7; */
 }
 
 /* Menu Items - Card Style */
 .menu-item {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    margin-bottom: 15px;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* background-color: #fff; */
+    /* border: 1px solid #ddd; */
+    /* margin-bottom: 15px; */
+    /* padding: 15px; */
+    /* border-radius: 8px; */
+    /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
 }
 
 .menu-item h3 {
-    color: #333;
-    margin-bottom: 10px;
+    /* color: #333; */
+    /* margin-bottom: 10px; */
 }
 
 .size-label {
-    margin-right: 10px;
-    display: inline-block;
-    margin-bottom: 5px;
+    /* margin-right: 10px; */
+    /* display: inline-block; */
+    /* margin-bottom: 5px; */
 }
 
 /* Responsive Design - Mobile First */
 @media screen and (min-width: 768px) {
     .container {
-        max-width: 600px; /* Fixed max width for larger screens */
+        /* Fixed max width for larger screens */
+        /* max-width: 600px; */
     }
 
     .title {
-        font-size: 2rem;
+        /* font-size: 2rem; */
     }
 }
