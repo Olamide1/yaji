@@ -13,6 +13,26 @@ html {
     /* height: 30px; */
 }
 
+/* https://dev.to/nazanin_ashrafi/how-to-darken-an-image-with-css-4f5h */
+.img-hero {
+    background-image: url("./images/Niger.png");
+}
+
+.img-hero .title, .img-hero .subtitle {
+    color: white;
+}
+
+.img-hero .subtitle span {
+    background: #bf1b1b;
+}
+
+@media (max-width: 700px) {
+    .img-hero .subtitle {
+        font-size: large;
+    }
+}
+
+
 .middle-input {
     padding-bottom: 0px;
     padding-left: 13px;
