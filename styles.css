@@ -16,6 +16,7 @@ html {
 /* https://dev.to/nazanin_ashrafi/how-to-darken-an-image-with-css-4f5h */
 .img-hero {
     background-image: url("./images/Niger.png");
+    background-size: cover;
 }
 
 .img-hero .title, .img-hero .subtitle {
