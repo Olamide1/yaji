@@ -15,9 +15,94 @@ function fetchMenu() {
 
 async function displayMenu(menu) {
     
+
+    const newMenuContainer = document.getElementById('new-menu');
+
+    menu.forEach((item) => {
+        const itemDiv = document.createElement('div');
+        const isOutOfStock = item?.out_of_stock ? 'disabled' : ''
+        itemDiv.className = 'column ';
+        itemDiv.innerHTML = `
+                <div class="card">
+
+                    <div class="card-content has-background-white">
+
+                    <div class="media">
+
+                    <div class="media-content">
+                            <p class="title has-text-left is-4 has-text-grey-dark">
+                                ${item.name} ${item?.out_of_stock ? '<span class="tag is-danger is-normal">Out of stock</span>' : ''}
+                            </p>
+                            <p class="subtitle is-6 has-text-grey">
+                                ${item.description}
+                            </p>
+                        </div>
+                    </div>
+
+                        <div class="content has-text-grey">
+                            <p class="subtitle has-text-grey-dark">
+                            
+                            </p>
+        
+                            ${item?.submenus.map((size) =>
+                                `
+                                <div class="columns">
+                                <div class="column is-6">
+                                    <p class="">${size.name} - $${size.price}</p>
+                                </div>
+                                <div class="column is-6">
+                                    <div class="field is-grouped menu-control">
+                                        <button
+                                        title="+, more"
+                                        ${isOutOfStock}
+                                        onclick="updateValue(${size.stripe_product_price_id}, 'decrement')" 
+                                        type="button"
+                                        class="button is-link mt-0 is-flex-grow-1">
+                                            <span class="icon is-small">
+                                                <i class="fa-solid fa-minus"></i>
+                                            </span>
+                                        </button>
+
+                                        <input 
+                                        step="1"
+                                        
+                                        ${isOutOfStock}
+                                        name="${size?.stripe_product_price_id}" 
+                                        id="${size?.stripe_product_price_id}"
+                                        data-price="${size?.price}"
+                                        placeholder="0"
+                                        min="0"
+                                        class="input is-radiusless mb-0 is-flex-grow-1 quantity-input" 
+                                        type="number" value="0" readonly>
+                                        
+                                        <button 
+                                        ${isOutOfStock}
+                                        onclick="updateValue(${size.stripe_product_price_id}, 'increment')"
+                                        type="button"
+                                        class="button is-danger mt-0 is-flex-grow-1">
+                                            <span class="icon is-small">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                                `
+                            ).join('')}
+
+                    
+                        </div>
+                    </div>
+                </div>
+            `
+        newMenuContainer.appendChild(itemDiv);
+    })
+    
+
+
     const plusSvg = `<svg width="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>plus</title><path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>`
     const minusSvg = `<svg width="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>minus</title><path d="M19,13H5V11H19V13Z" /></svg>`
-    const menuContainer = document.getElementById('menu');
+    const menuContainer = document.getElementById('menu-not-use');
     menu.forEach(item => {
         const itemDiv = document.createElement('div');
         const isOutOfStock = item?.out_of_stock ? 'disabled' : ''
@@ -44,7 +129,7 @@ async function displayMenu(menu) {
                         <p class="control mr-0">
                         <input 
                         ${isOutOfStock}
-                        class="input is-primary mb-0 quantity-input"
+                        class="input is-primary mb-0 quantity-input-not-use"
                         step="1"
                         name="${size?.stripe_product_price_id}" 
                         id="${size?.stripe_product_price_id}" min="0" data-price="${size.price}" value="0" type="number" placeholder="0">
@@ -63,7 +148,7 @@ async function displayMenu(menu) {
             </div>
 
         `;
-        menuContainer.appendChild(itemDiv);
+        menuContainer?.appendChild(itemDiv);
     });
 
     // not working...
@@ -80,7 +165,7 @@ async function displayMenu(menu) {
  */
 
 async function updateValue(input, action) {
-    // console.log('calling updateValue', input.value)
+    console.log('calling updateValue', action, input)
 
     if (input) {
         if (action === 'increment') {
@@ -97,7 +182,7 @@ async function updateValue(input, action) {
 function updateTotal() {
     let total = 0;
     document.querySelectorAll('.quantity-input').forEach(item => {
-        // console.log('item', item)
+        console.log('counting item', item)
         total += parseInt(item.value) * parseFloat(item.dataset.price);
     });
     document.getElementById('total').value = total.toFixed(2);
